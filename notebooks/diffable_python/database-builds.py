@@ -111,11 +111,11 @@ today = date.today()
 
 # ### Notebook run date
 
-display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')} and the information below reflects the state of the OpenSAFELY-TPP as at this date."""))
+display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')}.  The information below reflects the state of the OpenSAFELY-TPP as at this date."""))
 
 # ### Latest OpenSAFELY-TPP database build
 
-display(Markdown(f"""The most recent OpenSAFELY database build was {end_date.strftime('%Y-%m-%d')}."""))
+display(Markdown(f"""The most recent OpenSAFELY-TPP database build was {end_date.strftime('%Y-%m-%d')}."""))
 
 # ## Latest dataset builds
 # The dates in the table below reflect when the datasets were last _built_ by TPP for the OpenSAFELY database. 
