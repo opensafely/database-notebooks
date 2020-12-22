@@ -312,10 +312,12 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     
     counts, lastcounts, redact = createcounts(date_range, events, lastdate)
     
+    xlimlower = mdates.date2num(lastcounts.index[0]+pd.DateOffset(days=-1))
+    xlimupper = mdates.date2num(lastcounts.index[-1]+pd.DateOffset(days=+1))
     
     fig, axs = plt.subplots(1, 2, figsize=(15,5))
     
-    axs[0].plot(counts.index, counts, color='darkblue')
+    axs[0].plot(counts.index, counts, color='darkblue', zorder=2)
     axs[0].set_ylabel('event counts')
     axs[0].xaxis.set_tick_params(labelrotation=70)
     axs[0].set_ylim(bottom=0)
@@ -323,23 +325,21 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     axs[0].spines["left"].set_visible(False)
     axs[0].spines["right"].set_visible(False)
     axs[0].set_title("Since 2020-02-01")
-   
-      
-    xlimlower = mdates.date2num(lastcounts.index[0]+pd.DateOffset(days=-1))
-    xlimupper = mdates.date2num(lastcounts.index[-1]+pd.DateOffset(days=+1))
-    
-    axs[1].plot(lastcounts.index, lastcounts, label=events.name, marker='o', markersize=5, color='darkblue')
-    axs[1].plot(lastcounts[redact].index, lastcounts[redact], 'o', linestyle = 'None', color='tomato')
-        
+    ylimlower, ylimupper = axs[0].get_ylim()
+    axs[0].add_patch(patches.Rectangle((xlimlower,0),xlimupper, ylimupper, linewidth=1, edgecolor='none', facecolor='floralwhite', zorder=1))
 
-    axs[1].add_patch(patches.Rectangle((xlimlower,0.1),xlimupper,5.8,linewidth=1,edgecolor='none',facecolor='mistyrose', zorder=10))
+    
+    axs[1].plot(lastcounts.index, lastcounts, label=events.name, marker='o', markersize=5, color='darkblue', zorder=1)
+    axs[1].plot(lastcounts[redact].index, lastcounts[redact], 'o', linestyle = 'None', color='tomato', zorder=2)
     axs[1].xaxis.set_tick_params(labelrotation=70)
     axs[1].xaxis.set_major_locator(ticker.MultipleLocator(2))
     axs[1].set_ylim(bottom=0)
+    axs[1].add_patch(patches.Rectangle((xlimlower,0),xlimupper,5.8,linewidth=1,edgecolor='none',facecolor='mistyrose', zorder=3))
     axs[1].grid(True)
     axs[1].spines["left"].set_visible(False)
     axs[1].spines["right"].set_visible(False)
     axs[1].set_title("Last "+str(lookback)+" days of data\nLatest date is "+lastdatestring)
+    axs[1].set_facecolor('floralwhite')
     
     #plt.subplots_adjust(wspace = 0.2, hspace = 0.9)
     plt.tight_layout()
