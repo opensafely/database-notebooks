@@ -40,26 +40,6 @@ def closing_connection(dbconn):
         cnxn.close()
 
 
-def DBbuildtimes(cnxn, up_to=None):
-
-    # returns a dataframe containing the latest build time for the OS DB tables
-    # if up_to is specified, it takes the most recent build before that date
-    
-    if up_to is None:
-        up_to = pd.to_datetime('today')
-    else:
-        assert (type(up_to) is pd.Timestamp),  "up_to must be a Timestamp, eg using `pd.to_datetime()`"
-    
-    tablebuild = pd.read_sql(f"""
-        select b.BuildDesc as dataset, max(b.BuildDate) as latest_build from BuildInfo as b cross join LatestBuildTime as l
-        where b.BuildDate <= l.DtLatestBuild and b.BuildDate <= convert(date, '{up_to.strftime('%Y-%m-%d %H:%M:%S')}')
-        group by b.BuildDesc
-    """, cnxn)
-
-    return(tablebuild)
-
-   
-    
 def eventcountdf(event_dates, date_range, rule='D', popadjust=False):
     # to calculate the daily count for events recorded in a dataframe
     # where event_dates is a dataframe of date columns
@@ -292,10 +272,15 @@ def cmlinc_strata_plot(df, date_cols, var, date_range, panelheight=5, panelwidth
 
 
     
-
 def plotcounts(date_range, events=None, title="", lookback=30):
-    # This function plots events counts over time both overall and for the last X days up to the most recent extracted event.  
+    # This function plots event counts over time both overall and for the last X days up to the most recent extracted event.  
+    startdate = date_range.index.min()
+    enddate = date_range.index.max()
     lastdate = events.max()
+    
+    
+    startdatestring = startdate.strftime('%Y-%m-%d')
+    enddatestring = enddate.strftime('%Y-%m-%d')
     lastdatestring = lastdate.strftime('%Y-%m-%d')
         
     def createcounts(date_range, events, lastdate):
@@ -329,7 +314,7 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     axs[1].grid(True)
     axs[1].spines["left"].set_visible(False)
     axs[1].spines["right"].set_visible(False)
-    axs[1].set_title("Last "+str(lookback)+" days of data\nLatest date is "+lastdatestring)
+    axs[1].set_title(f"""\n\n Last {str(lookback)} days up to {lastdatestring}""")
     axs[1].set_facecolor('floralwhite')
     
     axs[0].plot(counts.index, counts, color='darkblue', zorder=2)
@@ -339,15 +324,15 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     axs[0].grid(True)
     axs[0].spines["left"].set_visible(False)
     axs[0].spines["right"].set_visible(False)
-    axs[0].set_title("Since 2020-02-01")
+    axs[0].set_title(f"""\n\n From {startdatestring} to {enddatestring}""")
     xlimlower0, xlimupper0 = axs[0].get_xlim()
     ylimlower0, ylimupper0 = axs[0].get_ylim()
-    axs[0].add_patch(patches.Rectangle((xlimlower1,0), xlimupper1-xlimlower1, max([ylimupper1, 7]), linewidth=1, edgecolor='none', facecolor='floralwhite', zorder=1))
-    axs[0].add_patch(patches.Rectangle((xlimlower0,0) ,xlimupper0-xlimlower0, 5, linewidth=1,edgecolor='none',facecolor='mistyrose', zorder=3))
+    axs[0].add_patch(patches.Rectangle((xlimlower1,0), xlimupper1-xlimlower1, max([ylimupper1, 7]), linewidth=1, edgecolor='orange', linestyle='--', facecolor='floralwhite', zorder=1))
+    axs[0].add_patch(patches.Rectangle((xlimlower0,0) ,xlimupper0-xlimlower0, 5, linewidth=1, edgecolor='none', facecolor='mistyrose', zorder=3))
     
     
     
-    #plt.subplots_adjust(wspace = 0.2, hspace = 0.9)
+    plt.subplots_adjust(top=0.8, wspace = 0.2, hspace = 0.9)
     plt.tight_layout()
-    fig.suptitle(title, y=1)
+    fig.suptitle("\n"+title, y=1, fontsize='x-large')
     plt.show()
