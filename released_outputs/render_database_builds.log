@@ -1,0 +1,78 @@
+2021-01-06T13:37:00.152411400Z [NbConvertApp] Converting notebook /workspace/notebooks/database-builds.ipynb to html
+2021-01-06T13:37:01.642852700Z [NbConvertApp] Executing notebook with kernel: python3
+2021-01-06T13:37:08.017739700Z [NbConvertApp] ERROR | Error while converting '/workspace/notebooks/database-builds.ipynb'
+2021-01-06T13:37:08.017795200Z Traceback (most recent call last):
+2021-01-06T13:37:08.017803600Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/nbconvertapp.py", line 410, in export_single_notebook
+2021-01-06T13:37:08.017811200Z     output, resources = self.exporter.from_filename(notebook_filename, resources=resources)
+2021-01-06T13:37:08.017818400Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/exporter.py", line 179, in from_filename
+2021-01-06T13:37:08.017825800Z     return self.from_file(f, resources=resources, **kw)
+2021-01-06T13:37:08.017832800Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/exporter.py", line 197, in from_file
+2021-01-06T13:37:08.017840100Z     return self.from_notebook_node(nbformat.read(file_stream, as_version=4), resources=resources, **kw)
+2021-01-06T13:37:08.017847500Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/html.py", line 95, in from_notebook_node
+2021-01-06T13:37:08.017854800Z     return super(HTMLExporter, self).from_notebook_node(nb, resources, **kw)
+2021-01-06T13:37:08.017861800Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/templateexporter.py", line 307, in from_notebook_node
+2021-01-06T13:37:08.017869000Z     nb_copy, resources = super(TemplateExporter, self).from_notebook_node(nb, resources, **kw)
+2021-01-06T13:37:08.017876000Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/exporter.py", line 139, in from_notebook_node
+2021-01-06T13:37:08.017883200Z     nb_copy, resources = self._preprocess(nb_copy, resources)
+2021-01-06T13:37:08.017889900Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/exporters/exporter.py", line 316, in _preprocess
+2021-01-06T13:37:08.017897000Z     nbc, resc = preprocessor(nbc, resc)
+2021-01-06T13:37:08.017905600Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/preprocessors/base.py", line 47, in __call__
+2021-01-06T13:37:08.017912700Z     return self.preprocess(nb, resources)
+2021-01-06T13:37:08.017919600Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/preprocessors/execute.py", line 405, in preprocess
+2021-01-06T13:37:08.017926800Z     nb, resources = super(ExecutePreprocessor, self).preprocess(nb, resources)
+2021-01-06T13:37:08.017934000Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/preprocessors/base.py", line 69, in preprocess
+2021-01-06T13:37:08.017943200Z     nb.cells[index], resources = self.preprocess_cell(cell, resources, index)
+2021-01-06T13:37:08.017950800Z   File "/root/.pyenv/versions/3.8.1/lib/python3.8/site-packages/nbconvert/preprocessors/execute.py", line 448, in preprocess_cell
+2021-01-06T13:37:08.017958100Z     raise CellExecutionError.from_cell_and_msg(cell, out)
+2021-01-06T13:37:08.018019500Z nbconvert.preprocessors.execute.CellExecutionError: An error occurred while executing the following cell:
+2021-01-06T13:37:08.018029700Z ------------------
+2021-01-06T13:37:08.018036600Z ## Import libraries
+2021-01-06T13:37:08.018043700Z 
+2021-01-06T13:37:08.018050300Z %load_ext autoreload
+2021-01-06T13:37:08.018057000Z %autoreload 2
+2021-01-06T13:37:08.018063700Z 
+2021-01-06T13:37:08.018070200Z import pyodbc
+2021-01-06T13:37:08.018076700Z import os
+2021-01-06T13:37:08.018083400Z import pandas as pd
+2021-01-06T13:37:08.018090100Z import numpy as np
+2021-01-06T13:37:08.018096700Z import matplotlib.pyplot as plt
+2021-01-06T13:37:08.018103400Z import matplotlib.ticker as ticker
+2021-01-06T13:37:08.018110200Z import matplotlib.patches as patches
+2021-01-06T13:37:08.018116700Z import matplotlib.dates as mdates
+2021-01-06T13:37:08.018123500Z from contextlib import contextmanager
+2021-01-06T13:37:08.018130200Z from datetime import date, datetime
+2021-01-06T13:37:08.018136800Z from IPython.display import display, Markdown
+2021-01-06T13:37:08.018143400Z 
+2021-01-06T13:37:08.018149900Z import sys
+2021-01-06T13:37:08.018156400Z sys.path.append('../lib/')
+2021-01-06T13:37:08.018163000Z from functions import *
+2021-01-06T13:37:08.018169700Z 
+2021-01-06T13:37:08.018176500Z # get server credentials from environ.txt
+2021-01-06T13:37:08.018183200Z dbconn = os.environ.get('OPENSAFELY_FULL_DATABASE_URL', None).strip('"')
+2021-01-06T13:37:08.018190200Z ------------------
+2021-01-06T13:37:08.018196700Z 
+2021-01-06T13:37:08.018203200Z [0;31m---------------------------------------------------------------------------[0m
+2021-01-06T13:37:08.018210500Z [0;31mAttributeError[0m                            Traceback (most recent call last)
+2021-01-06T13:37:08.018217600Z [0;32m<ipython-input-1-b4d90e10d644>[0m in [0;36m<module>[0;34m[0m
+2021-01-06T13:37:08.018225000Z [1;32m     21[0m [0;34m[0m[0m
+2021-01-06T13:37:08.018231900Z [1;32m     22[0m [0;31m# get server credentials from environ.txt[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+2021-01-06T13:37:08.018250700Z [0;32m---> 23[0;31m [0mdbconn[0m [0;34m=[0m [0mos[0m[0;34m.[0m[0menviron[0m[0;34m.[0m[0mget[0m[0;34m([0m[0;34m'OPENSAFELY_FULL_DATABASE_URL'[0m[0;34m,[0m [0;32mNone[0m[0;34m)[0m[0;34m.[0m[0mstrip[0m[0;34m([0m[0;34m'"'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+2021-01-06T13:37:08.018269700Z [0m
+2021-01-06T13:37:08.018277100Z [0;31mAttributeError[0m: 'NoneType' object has no attribute 'strip'
+2021-01-06T13:37:08.018284300Z AttributeError: 'NoneType' object has no attribute 'strip'
+2021-01-06T13:37:08.018291100Z 
+
+
+state: failed
+commit: fd13a3f3d790ce946ed9d9627d826d84f2aaf368
+docker_image_id: sha256:67ad1f10035bce838d90e21fb9d192dbbe20c26609f0fb7ab0d00bdbfc16f00b
+job_id: p4kush3bej6zz2rq
+run_by_user: wjchulme
+created_at: 2021-01-06T13:36:56Z
+started_at: 2021-01-06T13:36:59Z
+completed_at: 2021-01-06T13:37:10Z
+
+Job exited with an error code
+
+outputs:
+  (no outputs)

@@ -56,9 +56,11 @@ import sys
 sys.path.append('../lib/')
 from functions import *
 
-# get server credentials from environ.txt
-dbconn = os.environ.get('OPENSAFELY_FULL_DATABASE_URL', None).strip('"')
 
+# +
+# get server credentials from environ.txt
+
+dbconn = os.environ.get('FULL_DATABASE_URL', None).strip('"')
 
 # +
 ## Import schema data and date
@@ -92,6 +94,6 @@ for table in table_schema['TableName'].unique():
     tab = tab.drop(columns=['TableName', 'ColumnId', 'CollationName'])
     display(Markdown(f"## {table}"))
     display(tab.set_index('ColumnName'))
-# -
+# +
 
 
