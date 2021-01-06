@@ -82,7 +82,7 @@ sys.path.append('../lib/')
 from functions import *
 
 # get server credentials from environ.txt
-dbconn = os.environ.get('DBCONN', None).strip('"')
+dbconn = os.environ.get('OPENSAFELY_FULL_DATABASE_URL', None).strip('"')
 
 
 # +
