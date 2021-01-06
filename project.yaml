@@ -6,13 +6,13 @@ expectations:
 actions:
 
   render_database_builds:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database_builds.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
-        cohort: output/database_builds.html
+        cohort: output/database-builds.html
         
   render_database_schema:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database_schema.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
-        cohort: output/database_schema.html
+        cohort: output/database-schema.html
