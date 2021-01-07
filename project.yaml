@@ -5,14 +5,27 @@ expectations:
 
 actions:
 
-  render_database_builds:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+  database_builds_html:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --to html --output-dir=/workspace/output 
     outputs:
       moderately_sensitive:
-        cohort: output/database-builds.html
+        html: output/database-builds.html
         
-  render_database_schema:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+  database_schema_html:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --to html --output-dir=/workspace/output 
     outputs:
       moderately_sensitive:
-        cohort: output/database-schema.html
+        html: output/database-schema.html
+        
+  database_builds_md:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --to markdown --output-dir=/workspace/output
+    outputs:
+      moderately_sensitive:
+        md: output/*.png
+        
+  database_schema_md:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --to markdown --output-dir=/workspace/output 
+    outputs:
+      moderately_sensitive:
+        md: output/database-schema.md
+        png: output/*.png
