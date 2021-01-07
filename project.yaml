@@ -21,11 +21,12 @@ actions:
     run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --to markdown --output-dir=/workspace/output
     outputs:
       moderately_sensitive:
-        md: output/*.png
+        md: output/database-builds.md
+        png: output/database-builds_files/*.png
         
   database_schema_md:
     run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --to markdown --output-dir=/workspace/output 
     outputs:
       moderately_sensitive:
         md: output/database-schema.md
-        png: output/*.png
+        
