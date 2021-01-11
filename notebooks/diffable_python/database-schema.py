@@ -75,6 +75,13 @@ today = date.today()
 
 display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')}.  The information below reflects the state of the OpenSAFELY-TPP as at this date."""))
 
+# ## Table names by source
+# The table below lists all the data tables available in the OpenSAFELY-TPP database and where the data originate from.
+
+table_names = table_schema[['DataSource', 'TableName']].drop_duplicates().sort_values(['DataSource', 'TableName'])
+table_names = table_names[table_names['DataSource']!=""]
+display(table_names.reset_index(drop=True).style.set_properties(**{'text-align': 'left'}))
+
 # ## Table Schema
 #
 # The schema for each table contains the following info:
@@ -83,10 +90,8 @@ display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')}.  The
 # * `ColumnType`, the column type, for example integer, numeric or date &mdash; see [SQL Server _data types_ documentation](https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql) for more details.
 # * `Precision`, `Scale` and `MaxLength` &mdash; see [SQL Server _precision, scale, and length_ documentation](https://docs.microsoft.com/en-us/sql/t-sql/data-types/precision-scale-and-length-transact-sql) for more details.
 # * `IsNullable`, are Null values accepted.
-
-table_names = table_schema[['DataSource', 'TableName']].drop_duplicates().sort_values(['DataSource', 'TableName'])
-table_names = table_names[table_names['DataSource']!=""]
-display(table_names.reset_index(drop=True).style.set_properties(**{'text-align': 'left'}))
+#
+# The schema for each table is printed below.
 
 # +
 pd.set_option('display.max_columns', None)
@@ -94,13 +99,10 @@ pd.set_option('display.max_columns', None)
 for source in table_names['DataSource'].unique():
     
     display(Markdown("\n"))
-    display(Markdown(f"## {source}"))
+    display(Markdown(f"### {source}"))
     
     for table in table_names.loc[table_names['DataSource']==source, 'TableName']:
         tab = table_schema[table_schema['TableName']==table]
         tab = tab.drop(columns=['TableName', 'DataSource', 'ColumnId', 'CollationName'])
-        display(Markdown(f"### {table}"))
+        display(Markdown(f"#### {table}"))
         display(tab.set_index('ColumnName'))
-# -
-
-
