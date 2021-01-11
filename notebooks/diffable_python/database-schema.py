@@ -25,9 +25,9 @@
 # ### Data sources
 # Data sources are listed below, with the table name in the database given in brackets:
 #
-# * Positive or negative SARS-CoV2 test, first tests only, from SGSS (`SGSS_Positive` and `SGSS_Negative`)
-# * Positive or negative SARS-CoV2 test, any test, from SGSS (`SGSS_AllTests_Positive` and `SGSS_AllTests_Negative`)
-# * A&E attendance, from SUS Emergency Care Data (`EC`)
+# * Primary care records, from TPP-SystmOne (`S1`)
+# * Positive or negative SARS-CoV2 test, from SGSS (`SGSS`)
+# * A&E attendance, from SUS Emergency Care Data (`ECDS`)
 # * Hospital admission, from SUS Admitted Patient Care Data (`APCS`)
 # * Covid-related ICU admission, from ICNARC (`ICNARC`)
 # * Covid-related in-hospital death, from CPNS (`CPNS`)
@@ -80,20 +80,27 @@ display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')}.  The
 # The schema for each table contains the following info:
 #
 # * `ColumnName`, the column name.
-# * `ColumnType`, the column type, for example integer, numeric or date &mdash; see [here](https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql) for more details.
-# * `Precision`, `Scale` and `MaxLength` &mdash; see [here](https://docs.microsoft.com/en-us/sql/t-sql/data-types/precision-scale-and-length-transact-sql) for more details.
+# * `ColumnType`, the column type, for example integer, numeric or date &mdash; see [SQL Server _data types_ documentation](https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql) for more details.
+# * `Precision`, `Scale` and `MaxLength` &mdash; see [SQL Server _precision, scale, and length_ documentation](https://docs.microsoft.com/en-us/sql/t-sql/data-types/precision-scale-and-length-transact-sql) for more details.
 # * `IsNullable`, are Null values accepted.
 
-display(table_schema[['TableName']].drop_duplicates().reset_index(drop=True).style.set_properties(**{'text-align': 'left'}))
+table_names = table_schema[['DataSource', 'TableName']].drop_duplicates().sort_values(['DataSource', 'TableName'])
+table_names = table_names[table_names['DataSource']!=""]
+display(table_names.reset_index(drop=True).style.set_properties(**{'text-align': 'left'}))
 
 # +
 pd.set_option('display.max_columns', None)
 
-for table in table_schema['TableName'].unique():
-    tab = table_schema[table_schema['TableName']==table]
-    tab = tab.drop(columns=['TableName', 'ColumnId', 'CollationName'])
-    display(Markdown(f"## {table}"))
-    display(tab.set_index('ColumnName'))
-# +
+for source in table_names['DataSource'].unique():
+    
+    display(Markdown("\n"))
+    display(Markdown(f"## {source}"))
+    
+    for table in table_names.loc[table_names['DataSource']==source, 'TableName']:
+        tab = table_schema[table_schema['TableName']==table]
+        tab = tab.drop(columns=['TableName', 'DataSource', 'ColumnId', 'CollationName'])
+        display(Markdown(f"### {table}"))
+        display(tab.set_index('ColumnName'))
+# -
 
 
