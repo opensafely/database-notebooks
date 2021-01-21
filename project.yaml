@@ -5,27 +5,49 @@ expectations:
 
 actions:
 
+  generate_population:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition
+    outputs:
+      highly_sensitive:
+        cohort: output/input.csv
+        
+  # note not possible to execute and save notebook in a single action with `--execute --to notebook` because of self-dependency
+  # still possible to execute and save to html or md file
+
+  characteristics_html:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-patient-characteristics.ipynb --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+    needs: [generate_population]
+    outputs:
+      moderately_sensitive:
+        html: output/database-patient-characteristics.html
+
   database_builds_html:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --to html --output-dir=/workspace/output
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
         html: output/database-builds.html
         
   database_schema_html:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --to html --output-dir=/workspace/output
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
         html: output/database-schema.html
-        
+       
+  characteristics_md:
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-patient-characteristics.ipynb --execute --to markdown --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
+    outputs:
+      moderately_sensitive:
+        md: output/database-patient-characteristics.md
+       
   database_builds_md:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --to markdown --output-dir=/workspace/output
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-builds.ipynb --execute --to markdown --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
         md: output/database-builds.md
         png: output/database-builds_files/*.png
         
   database_schema_md:
-    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --to markdown --output-dir=/workspace/output
+    run: jupyter:latest jupyter nbconvert /workspace/notebooks/database-schema.ipynb --execute --to markdown --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     outputs:
       moderately_sensitive:
         md: output/database-schema.md
