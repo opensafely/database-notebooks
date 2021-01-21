@@ -60,7 +60,7 @@ categories = [
 dfdtype={field: "category" for field in categories}
 
 df = pd.read_csv(
-    '../output/input.csv', #real data
+    '../output/input.csv',
     dtype = dfdtype
 )
 

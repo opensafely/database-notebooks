@@ -103,12 +103,12 @@ with closing_connection(dbconn) as cnxn:
 start_date = pd.to_datetime("2020-02-01", format='%Y-%m-%d')
 #start_date = pd.to_datetime("2020-02-01", format='%Y-%m-%d')
 end_date = pd.to_datetime(latestbuilds['latest_import'].max(), format='%Y-%m-%d')
-today = date.today()
+run_date = date.today()
 # -
 
 # ### Notebook run date
 
-display(Markdown(f"""This notebook was run on {today.strftime('%Y-%m-%d')}.  The information below reflects the state of the OpenSAFELY-TPP as at this date."""))
+display(Markdown(f"""This notebook was run on {run_date.strftime('%Y-%m-%d')}.  The information below reflects the state of the OpenSAFELY-TPP as at this date."""))
 
 # ## Latest dataset import dates
 # TPP create a snapshot of the primary care information captured in the SystmOne database which is processed (for example unstructured free-text is removed and other OpensAFELY-specific tables are created) before being imported into the OpenSAFELY-TPP database. 
@@ -132,7 +132,7 @@ fig, ax = plt.subplots(figsize=(10,5))
 sources = allbuilds['BuildDesc'].unique()
 
 for source in allbuilds['BuildDesc'].unique():
-    dat = allbuilds[(allbuilds['BuildDesc']==source) & (allbuilds['BuildDate']<end_date)]
+    dat = allbuilds[(allbuilds['BuildDesc']==source)]
     x = dat['BuildDate']
     y = dat['BuildDesc']
     ax.scatter(x, y, marker='o')
@@ -141,8 +141,8 @@ ax.xaxis.set_tick_params(labelrotation=70)
 ax.grid(True, axis='x')
 ax.spines["left"].set_visible(False)
 ax.spines["right"].set_visible(False)
-ax.axvline(today, color='black')
-ax.set_title(f"""Latest dataset import dates as at {today.strftime('%Y-%m-%d')}""")
+ax.axvline(run_date, color='black')
+ax.set_title(f"""Latest dataset import dates as at {run_date.strftime('%Y-%m-%d')}""")
 # -
 
 # ## Event activity in external datasets
@@ -274,7 +274,6 @@ def recurrentquery(table, id_table, date_table, from_date, head=5):
 # `patients_with_at_least_1_events` is the number of unique patients in the dataset. 
 # This is the number of events that can be returned by a study variable that takes the first event or the last event, from 1 February onwards. 
 
-# +
 with closing_connection(dbconn) as cnxn:
     recurrentquery("APCS", "Patient_ID", "Admission_Date", start_date_text, 5)
     recurrentquery("CPNS", "Patient_ID", "DateOfDeath", start_date_text, 5)
