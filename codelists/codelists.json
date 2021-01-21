@@ -1,0 +1,10 @@
+{
+  "files": {
+    "opensafely-ethnicity.csv": {
+      "id": "opensafely/ethnicity/2020-04-27",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/ethnicity/2020-04-27/",
+      "downloaded_at": "2021-01-21 10:14:57.933627Z",
+      "sha": "3d2f3998b71863a80b24d60f6f4282e14191ae13"
+    }
+  }
+}
