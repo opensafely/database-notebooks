@@ -336,3 +336,45 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     plt.tight_layout()
     fig.suptitle("\n"+title, y=1, fontsize='x-large')
     plt.show()
+
+    
+def plotcounts_history(events=None, title=""):
+    # This function plots event counts over time both overall and for the last X days up to the most recent extracted event.  
+    startdate = events.min()
+    enddate = events.max()
+    
+    date_range = pd.DataFrame(
+        index = pd.date_range(start=startdate, end=enddate, freq="D")
+    )
+    
+    startdatestring = startdate.strftime('%Y-%m-%d')
+    enddatestring = enddate.strftime('%Y-%m-%d')
+    
+
+    counts_day = eventcountseries(events, date_range, rule="D")
+    redact_day = (counts_day <6) & (counts_day>0)
+    counts_day = counts_day.where(~redact_day, 2.5) #redact small numbers
+    
+    counts_week = eventcountseries(events, date_range, rule="W")
+    redact_week = (counts_week <6) & (counts_week>0)
+    counts_week = counts_week.where(~redact_week, 2.5) #redact small numbers
+       
+    fig, axs = plt.subplots(1, 1, figsize=(15,5))
+    
+    axs.plot(counts_day.index, counts_day, color='darkblue', zorder=2)
+    axs.plot(counts_week.index - pd.DateOffset(3), counts_week/7, color='orange', zorder=3)
+    axs.set_ylabel('event counts')
+    axs.xaxis.set_tick_params(labelrotation=70)
+    axs.set_ylim(bottom=0)
+    axs.grid(True)
+    axs.spines["left"].set_visible(False)
+    axs.spines["right"].set_visible(False)
+    axs.set_title(f"""\n\n From {startdatestring} to {enddatestring}""")
+    xlimlower, xlimupper = axs.get_xlim()
+    ylimlower, ylimupper = axs.get_ylim()
+    axs.add_patch(patches.Rectangle((xlimlower,0) ,xlimupper-xlimlower, 5, linewidth=1, edgecolor='none', facecolor='mistyrose', zorder=4))
+       
+    plt.subplots_adjust(top=0.8, wspace = 0.2, hspace = 0.9)
+    plt.tight_layout()
+    fig.suptitle("\n"+title, y=1, fontsize='x-large')
+    plt.show()
