@@ -274,7 +274,6 @@ def recurrentquery(table, id_table, date_table, from_date, head=5):
 # `patients_with_at_least_1_events` is the number of unique patients in the dataset. 
 # This is the number of events that can be returned by a study variable that takes the first event or the last event, from 1 February onwards. 
 
-# +
 with closing_connection(dbconn) as cnxn:
     recurrentquery("APCS", "Patient_ID", "Admission_Date", start_date_text, 5)
     recurrentquery("CPNS", "Patient_ID", "DateOfDeath", start_date_text, 5)
