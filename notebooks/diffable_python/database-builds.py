@@ -163,9 +163,9 @@ date_range = pd.DataFrame(
 # +
 def datequery(table, var_table, var_df, from_date):
     query = (
-      "select " + var_table + " as " + var_df
-    + " from " + table
-    + " where " + var_table + " >= convert(date, '" + from_date + "')"
+      "SELECT " + var_table + " AS " + var_df
+    + " FROM " + table
+    + " WHERE " + var_table + " >= CONVERT(date, '" + from_date + "')"
     )
     return query
 
@@ -178,17 +178,17 @@ EC_query = datequery("EC", "Arrival_Date", "ed_attendance_date", start_date_text
 ICNARC_query = datequery("ICNARC", "CONVERT(date, IcuAdmissionDateTime)", "icu_admission_date", start_date_text)
 ONS_query = datequery("ONS_Deaths", "dod", "ons_death_date", start_date_text)
 SGSS_query = datequery("""( 
-         SELECT * FROM SGSS_Positive 
-         UNION
-         SELECT * FROM SGSS_Negative
-         )  as a""", 
+         SELECT Earliest_Specimen_Date FROM SGSS_Positive 
+         UNION ALL
+         SELECT Earliest_Specimen_Date FROM SGSS_Negative
+         )  AS a""", 
         "Earliest_Specimen_Date", "specimen_date", start_date_text)
 SGSSpos_query = datequery("SGSS_Positive", "Earliest_Specimen_Date", "specimen_date", start_date_text)
 SGSS_AllTests_query = datequery("""( 
-         SELECT * FROM SGSS_AllTests_Positive 
-         UNION
-         SELECT * FROM SGSS_AllTests_Negative
-         )  as a""", 
+         SELECT Specimen_Date FROM SGSS_AllTests_Positive 
+         UNION ALL
+         SELECT Specimen_Date FROM SGSS_AllTests_Negative
+         )  AS a""", 
         "Specimen_Date", "specimen_date", start_date_text)
 SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", "specimen_date", start_date_text)
 
