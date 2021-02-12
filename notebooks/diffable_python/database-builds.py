@@ -15,7 +15,7 @@
 # ---
 
 # + [markdown]
-# # Latest available activity for data sources in OpenSAFELY
+# # Latest coverage for data sources in OpenSAFELY
 #
 # This notebook provides information about data import dates and recent activity in the OpenSAFELY-TPP database. 
 #
@@ -135,7 +135,7 @@ for source in allbuilds['BuildDesc'].unique():
     dat = allbuilds[(allbuilds['BuildDesc']==source)]
     x = dat['BuildDate']
     y = dat['BuildDesc']
-    ax.scatter(x, y, marker='o')
+    ax.scatter(x, y, marker='.', s=60)
 
 ax.xaxis.set_tick_params(labelrotation=70)
 ax.grid(True, axis='x')
@@ -274,6 +274,7 @@ def recurrentquery(table, id_table, date_table, from_date, head=5):
 # `patients_with_at_least_1_events` is the number of unique patients in the dataset. 
 # This is the number of events that can be returned by a study variable that takes the first event or the last event, from 1 February onwards. 
 
+# +
 with closing_connection(dbconn) as cnxn:
     recurrentquery("APCS", "Patient_ID", "Admission_Date", start_date_text, 5)
     recurrentquery("CPNS", "Patient_ID", "DateOfDeath", start_date_text, 5)
