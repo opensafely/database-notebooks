@@ -104,6 +104,7 @@ start_date = pd.to_datetime("2020-02-01", format='%Y-%m-%d')
 #start_date = pd.to_datetime("2020-02-01", format='%Y-%m-%d')
 end_date = pd.to_datetime(latestbuilds['latest_import'].max(), format='%Y-%m-%d')
 run_date = date.today()
+run_datetime = datetime.now()
 # -
 
 # ### Notebook run date
@@ -141,7 +142,7 @@ ax.xaxis.set_tick_params(labelrotation=70)
 ax.grid(True, axis='x')
 ax.spines["left"].set_visible(False)
 ax.spines["right"].set_visible(False)
-ax.axvline(run_date, color='black')
+ax.axvline(run_datetime, color='black')
 ax.set_title(f"""Latest dataset import dates as at {run_date.strftime('%Y-%m-%d')}""")
 # -
 
