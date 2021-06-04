@@ -1,0 +1,39 @@
+name: HTML Publisher
+on:
+  push:
+    paths:
+    - "notebooks/database-builds.ipynb"
+    - "notebooks/database-schema.ipynb"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish HTML notebooks
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+    - name: Install jupyter
+      run: pip install jupyter
+    - name: Convert notebooks
+      run: |
+        jupyter nbconvert notebooks/database-builds.ipynb --to html --template basic --output-dir notebooks/html
+        jupyter nbconvert notebooks/database-schema.ipynb --to html --template basic --output-dir notebooks/html
+    - name: Commit files
+      run: |
+        git status
+        if git diff-index --quiet HEAD; then
+          exit
+        fi
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add notebooks/html/database-builds.html
+        git add notebooks/html/database-schema.html
+        git commit -m "Update HTML notebooks"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
