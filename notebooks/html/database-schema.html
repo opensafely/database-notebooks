@@ -30,63 +30,12 @@
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Import libraries</span>
-
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-
-<span class="kn">import</span> <span class="nn">pyodbc</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span>
-
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../lib/&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">functions</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># get server credentials from environ.txt</span>
-
-<span class="n">dbconn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FULL_DATABASE_URL&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Import schema data and date</span>
-
-<span class="k">with</span> <span class="n">closing_connection</span><span class="p">(</span><span class="n">dbconn</span><span class="p">)</span> <span class="k">as</span> <span class="n">cnxn</span><span class="p">:</span>
-    <span class="n">table_schema</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;select * from OpenSAFELYSchemaInformation&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">cnxn</span><span class="p">)</span>
-
-<span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
@@ -97,25 +46,11 @@
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;This notebook was run on </span><span class="si">{</span><span class="n">today</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.  The information below reflects the state of the OpenSAFELY-TPP as at this date.&quot;&quot;&quot;</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -138,27 +73,11 @@
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">table_names</span> <span class="o">=</span> <span class="n">table_schema</span><span class="p">[[</span><span class="s1">&#39;DataSource&#39;</span><span class="p">,</span> <span class="s1">&#39;TableName&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;DataSource&#39;</span><span class="p">,</span> <span class="s1">&#39;TableName&#39;</span><span class="p">])</span>
-<span class="n">table_names</span> <span class="o">=</span> <span class="n">table_names</span><span class="p">[</span><span class="n">table_names</span><span class="p">[</span><span class="s1">&#39;DataSource&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
-<span class="n">display</span><span class="p">(</span><span class="n">table_names</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">set_properties</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;text-align&#39;</span><span class="p">:</span> <span class="s1">&#39;left&#39;</span><span class="p">}))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -711,36 +630,11 @@
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">table_names</span><span class="p">[</span><span class="s1">&#39;DataSource&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
-    
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;### </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
-    
-    <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">table_names</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">table_names</span><span class="p">[</span><span class="s1">&#39;DataSource&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;TableName&#39;</span><span class="p">]:</span>
-        <span class="n">tab</span> <span class="o">=</span> <span class="n">table_schema</span><span class="p">[</span><span class="n">table_schema</span><span class="p">[</span><span class="s1">&#39;TableName&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">table</span><span class="p">]</span>
-        <span class="n">tab</span> <span class="o">=</span> <span class="n">tab</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TableName&#39;</span><span class="p">,</span> <span class="s1">&#39;DataSource&#39;</span><span class="p">,</span> <span class="s1">&#39;ColumnId&#39;</span><span class="p">,</span> <span class="s1">&#39;CollationName&#39;</span><span class="p">])</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;#### </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">tab</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;ColumnName&#39;</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -750,9 +644,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -763,9 +654,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ICNARC">ICNARC<a class="anchor-link" href="#ICNARC">&#182;</a></h4>
@@ -774,9 +662,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -1135,9 +1020,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -1146,9 +1028,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -1159,9 +1038,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="HighCostDrugs">HighCostDrugs<a class="anchor-link" href="#HighCostDrugs">&#182;</a></h4>
@@ -1170,9 +1046,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -1387,9 +1260,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -1398,9 +1268,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -1411,9 +1278,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="APCS">APCS<a class="anchor-link" href="#APCS">&#182;</a></h4>
@@ -1422,9 +1286,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -1687,9 +1548,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="APCS_Cost">APCS_Cost<a class="anchor-link" href="#APCS_Cost">&#182;</a></h4>
@@ -1698,9 +1556,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -1787,9 +1642,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="APCS_Der">APCS_Der<a class="anchor-link" href="#APCS_Der">&#182;</a></h4>
@@ -1798,9 +1650,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -1943,9 +1792,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -1954,9 +1800,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -1967,9 +1810,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CPNS">CPNS<a class="anchor-link" href="#CPNS">&#182;</a></h4>
@@ -1978,9 +1818,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -2291,9 +2128,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -2302,9 +2136,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -2315,9 +2146,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC">EC<a class="anchor-link" href="#EC">&#182;</a></h4>
@@ -2326,9 +2154,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -2599,9 +2424,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_AlcoholDrugInvolvement">EC_AlcoholDrugInvolvement<a class="anchor-link" href="#EC_AlcoholDrugInvolvement">&#182;</a></h4>
@@ -2610,9 +2432,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -2867,9 +2686,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_Comorbidities">EC_Comorbidities<a class="anchor-link" href="#EC_Comorbidities">&#182;</a></h4>
@@ -2878,9 +2694,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -3135,9 +2948,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_Cost">EC_Cost<a class="anchor-link" href="#EC_Cost">&#182;</a></h4>
@@ -3146,9 +2956,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -3227,9 +3034,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_Diagnosis">EC_Diagnosis<a class="anchor-link" href="#EC_Diagnosis">&#182;</a></h4>
@@ -3238,9 +3042,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -3695,9 +3496,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_Investigation">EC_Investigation<a class="anchor-link" href="#EC_Investigation">&#182;</a></h4>
@@ -3706,9 +3504,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -4155,9 +3950,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_PatientMentalHealth">EC_PatientMentalHealth<a class="anchor-link" href="#EC_PatientMentalHealth">&#182;</a></h4>
@@ -4166,9 +3958,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -4304,9 +4093,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="EC_Treatment">EC_Treatment<a class="anchor-link" href="#EC_Treatment">&#182;</a></h4>
@@ -4315,9 +4101,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -4764,9 +4547,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -4775,9 +4555,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -4788,9 +4565,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ECDS">ECDS<a class="anchor-link" href="#ECDS">&#182;</a></h4>
@@ -4799,9 +4573,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -4937,9 +4708,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ECDS_EC_Diagnoses">ECDS_EC_Diagnoses<a class="anchor-link" href="#ECDS_EC_Diagnoses">&#182;</a></h4>
@@ -4948,9 +4716,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -5029,9 +4794,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -5040,9 +4802,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -5053,9 +4812,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="HealthCareWorker">HealthCareWorker<a class="anchor-link" href="#HealthCareWorker">&#182;</a></h4>
@@ -5064,9 +4820,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -5129,9 +4882,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -5140,9 +4890,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -5153,9 +4900,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MPI">MPI<a class="anchor-link" href="#MPI">&#182;</a></h4>
@@ -5164,9 +4908,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -5397,9 +5138,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="UPRN">UPRN<a class="anchor-link" href="#UPRN">&#182;</a></h4>
@@ -5408,9 +5146,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -5673,9 +5408,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -5684,9 +5416,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -5697,9 +5426,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="OPA">OPA<a class="anchor-link" href="#OPA">&#182;</a></h4>
@@ -5708,9 +5434,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -5957,9 +5680,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="OPA_Cost">OPA_Cost<a class="anchor-link" href="#OPA_Cost">&#182;</a></h4>
@@ -5968,9 +5688,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6057,9 +5774,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="OPA_Diag">OPA_Diag<a class="anchor-link" href="#OPA_Diag">&#182;</a></h4>
@@ -6068,9 +5782,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6165,9 +5876,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="OPA_Proc">OPA_Proc<a class="anchor-link" href="#OPA_Proc">&#182;</a></h4>
@@ -6176,9 +5884,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6273,9 +5978,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -6284,9 +5986,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -6297,9 +5996,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="SGSS_AllTests_Negative">SGSS_AllTests_Negative<a class="anchor-link" href="#SGSS_AllTests_Negative">&#182;</a></h4>
@@ -6308,9 +6004,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6461,9 +6154,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="SGSS_AllTests_Positive">SGSS_AllTests_Positive<a class="anchor-link" href="#SGSS_AllTests_Positive">&#182;</a></h4>
@@ -6472,9 +6162,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6641,9 +6328,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="SGSS_Negative">SGSS_Negative<a class="anchor-link" href="#SGSS_Negative">&#182;</a></h4>
@@ -6652,9 +6336,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6773,9 +6454,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="SGSS_Positive">SGSS_Positive<a class="anchor-link" href="#SGSS_Positive">&#182;</a></h4>
@@ -6784,9 +6462,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -6921,9 +6596,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -6932,9 +6604,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -6945,9 +6614,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ONS_CIS">ONS_CIS<a class="anchor-link" href="#ONS_CIS">&#182;</a></h4>
@@ -6956,9 +6622,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7094,9 +6757,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -7105,9 +6765,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -7118,9 +6775,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ONS_Deaths">ONS_Deaths<a class="anchor-link" href="#ONS_Deaths">&#182;</a></h4>
@@ -7129,9 +6783,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7466,9 +7117,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -7477,9 +7125,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -7490,9 +7135,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="BuildInfo">BuildInfo<a class="anchor-link" href="#BuildInfo">&#182;</a></h4>
@@ -7501,9 +7143,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7574,9 +7213,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CodeCountIndicator">CodeCountIndicator<a class="anchor-link" href="#CodeCountIndicator">&#182;</a></h4>
@@ -7585,9 +7221,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7650,9 +7283,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="LatestBuildTime">LatestBuildTime<a class="anchor-link" href="#LatestBuildTime">&#182;</a></h4>
@@ -7661,9 +7291,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7718,9 +7345,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="OpenSAFELYSchemaInformation">OpenSAFELYSchemaInformation<a class="anchor-link" href="#OpenSAFELYSchemaInformation">&#182;</a></h4>
@@ -7729,9 +7353,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -7890,9 +7511,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -7901,9 +7519,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -7914,9 +7529,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Household">Household<a class="anchor-link" href="#Household">&#182;</a></h4>
@@ -7925,9 +7537,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8046,9 +7655,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="HouseholdMember">HouseholdMember<a class="anchor-link" href="#HouseholdMember">&#182;</a></h4>
@@ -8057,9 +7663,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8130,9 +7733,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MSOA_PopulationEstimates_2019">MSOA_PopulationEstimates_2019<a class="anchor-link" href="#MSOA_PopulationEstimates_2019">&#182;</a></h4>
@@ -8141,9 +7741,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8279,9 +7876,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="PotentialCareHomeAddress">PotentialCareHomeAddress<a class="anchor-link" href="#PotentialCareHomeAddress">&#182;</a></h4>
@@ -8290,9 +7884,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8371,9 +7962,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 
@@ -8382,9 +7970,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -8395,9 +7980,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Appointment">Appointment<a class="anchor-link" href="#Appointment">&#182;</a></h4>
@@ -8406,9 +7988,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8535,9 +8114,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CTV3Dictionary">CTV3Dictionary<a class="anchor-link" href="#CTV3Dictionary">&#182;</a></h4>
@@ -8546,9 +8122,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8611,9 +8184,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CTV3Hierarchy">CTV3Hierarchy<a class="anchor-link" href="#CTV3Hierarchy">&#182;</a></h4>
@@ -8622,9 +8192,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8711,9 +8278,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CodedEvent">CodedEvent<a class="anchor-link" href="#CodedEvent">&#182;</a></h4>
@@ -8722,9 +8286,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8819,9 +8380,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="CodedEventRange">CodedEventRange<a class="anchor-link" href="#CodedEventRange">&#182;</a></h4>
@@ -8830,9 +8388,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -8935,9 +8490,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Consultation">Consultation<a class="anchor-link" href="#Consultation">&#182;</a></h4>
@@ -8946,9 +8498,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9027,9 +8576,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="DataDictionary">DataDictionary<a class="anchor-link" href="#DataDictionary">&#182;</a></h4>
@@ -9038,9 +8584,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9119,9 +8662,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="ICD10Dictionary">ICD10Dictionary<a class="anchor-link" href="#ICD10Dictionary">&#182;</a></h4>
@@ -9130,9 +8670,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9211,9 +8748,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MedicationDictionary">MedicationDictionary<a class="anchor-link" href="#MedicationDictionary">&#182;</a></h4>
@@ -9222,9 +8756,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9343,9 +8874,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MedicationIssue">MedicationIssue<a class="anchor-link" href="#MedicationIssue">&#182;</a></h4>
@@ -9354,9 +8882,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9491,9 +9016,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MedicationRepeat">MedicationRepeat<a class="anchor-link" href="#MedicationRepeat">&#182;</a></h4>
@@ -9502,9 +9024,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9631,9 +9150,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="MedicationSensitivity">MedicationSensitivity<a class="anchor-link" href="#MedicationSensitivity">&#182;</a></h4>
@@ -9642,9 +9158,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9755,9 +9268,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Organisation">Organisation<a class="anchor-link" href="#Organisation">&#182;</a></h4>
@@ -9766,9 +9276,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9855,9 +9362,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Patient">Patient<a class="anchor-link" href="#Patient">&#182;</a></h4>
@@ -9866,9 +9370,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -9947,9 +9448,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="PatientAddress">PatientAddress<a class="anchor-link" href="#PatientAddress">&#182;</a></h4>
@@ -9958,9 +9456,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10071,9 +9566,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="QOFClusterReference">QOFClusterReference<a class="anchor-link" href="#QOFClusterReference">&#182;</a></h4>
@@ -10082,9 +9574,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10163,9 +9652,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="RegistrationHistory">RegistrationHistory<a class="anchor-link" href="#RegistrationHistory">&#182;</a></h4>
@@ -10174,9 +9660,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10263,9 +9746,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="UnitDictionary">UnitDictionary<a class="anchor-link" href="#UnitDictionary">&#182;</a></h4>
@@ -10274,9 +9754,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10387,9 +9864,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="Vaccination">Vaccination<a class="anchor-link" href="#Vaccination">&#182;</a></h4>
@@ -10398,9 +9872,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10495,9 +9966,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="VaccinationReference">VaccinationReference<a class="anchor-link" href="#VaccinationReference">&#182;</a></h4>
@@ -10506,9 +9974,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -10579,9 +10044,6 @@
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="YCodeToSnomedMapping">YCodeToSnomedMapping<a class="anchor-link" href="#YCodeToSnomedMapping">&#182;</a></h4>
@@ -10590,9 +10052,6 @@
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 <div class="output_html rendered_html output_subarea ">
