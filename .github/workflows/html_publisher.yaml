@@ -19,8 +19,8 @@ jobs:
       run: pip install jupyter
     - name: Convert notebooks
       run: |
-        jupyter nbconvert notebooks/database-builds.ipynb --to html --template basic --output-dir notebooks/html
-        jupyter nbconvert notebooks/database-schema.ipynb --to html --template basic --output-dir notebooks/html
+        jupyter nbconvert notebooks/database-builds.ipynb --to html --template basic --no-input --output-dir notebooks/html
+        jupyter nbconvert notebooks/database-schema.ipynb --to html --template basic --no-input --output-dir notebooks/html
     - name: Commit files
       run: |
         git status
