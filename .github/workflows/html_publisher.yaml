@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: 3.9
     - name: Install jupyter
-      run: pip install jupyter
+      run: pip install jupyter==1.0.0
     - name: Convert notebooks
       run: |
         jupyter nbconvert notebooks/database-builds.ipynb --to html --template basic --no-input --output-dir notebooks/html
