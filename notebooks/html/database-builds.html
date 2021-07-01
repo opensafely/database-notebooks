@@ -1,49 +1,34 @@
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Latest-coverage-for-data-sources-in-OpenSAFELY">Latest coverage for data sources in OpenSAFELY<a class="anchor-link" href="#Latest-coverage-for-data-sources-in-OpenSAFELY">&#182;</a></h1><p>This notebook provides information about data import dates and recent activity in the OpenSAFELY-TPP database.</p>
-<p>This notebook can be used to:</p>
-<ul>
-<li>Obtain the most recent import date for each data source</li>
-<li>Obtain the frequency of historical import dates for each external data source</li>
-<li>Obtain the most recent event date for each data source amongst TPP patients</li>
-<li>Understand event activity amongst TPP patients from 1 February 2020 onwards</li>
-<li>Estimate the latest reliable date for events recorded in each data source, i.e., a cut-off beyond which the data may be incomplete.</li>
-</ul>
-<p>This notebook can not be used to:</p>
-<ul>
-<li>Obtain future import dates</li>
-<li>Understand patient activity over time at a national level</li>
-<li>Estimate the earliest reliable date for events recorded in each data source</li>
-</ul>
+<h1 id="Import-dates-and-date-coverage-for-OpenSAFELY-TPP-data-sources">Import dates and date coverage for OpenSAFELY-TPP data sources<a class="anchor-link" href="#Import-dates-and-date-coverage-for-OpenSAFELY-TPP-data-sources">&#182;</a></h1><p>This <a href="https://www.opensafely.org/">OpenSAFELY</a> notebook provides data import dates and counts of raw event data for externally linked data sources in the <a href="https://docs.opensafely.org/dataset-systmone/">OpenSAFELY-TPP database</a>. It is part of the technical documentation for users of the OpenSAFELY platform to guide analyses and <strong>it should not be used for inference about any aspect of the pandemic, public health, or health service activity</strong>. For the avoidance of doubt: any clinical or epidemiological interpretation of this raw information is likely to be a misinterpretation.</p>
+<p>If you would like to apply to use the OpenSAFELY platform please read our <a href="https://docs.opensafely.org/">documentation</a>, the <a href="https://www.opensafely.org/about/">principles of the platform</a>, and information about our <a href="https://www.opensafely.org/onboarding-new-users/">pilot programme for onboarding external users</a>.</p>
+<p>If you want to see the Python code used to create this notebook, you can <a href="https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-builds.ipynb">view it on GitHub</a>.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Data-sources">Data sources<a class="anchor-link" href="#Data-sources">&#182;</a></h3><p>Data sources are listed below, with the table name in the database given in brackets:</p>
-<ul>
-<li>Positive or negative SARS-CoV2 test, first tests only, from SGSS (<code>SGSS_Positive</code> and <code>SGSS_Negative</code>)</li>
-<li>Positive or negative SARS-CoV2 test, any test, from SGSS (<code>SGSS_AllTests_Positive</code> and <code>SGSS_AllTests_Negative</code>)</li>
-<li>A&amp;E attendance, from SUS Emergency Care Data (<code>EC</code>)</li>
-<li>Hospital admission, from SUS Admitted Patient Care Data (<code>APCS</code>)</li>
-<li>Covid-related ICU admission, from ICNARC (<code>ICNARC</code>)</li>
-<li>Covid-related in-hospital death, from CPNS (<code>CPNS</code>)</li>
-<li>All-cause registered deaths, from ONS (<code>ONS_Deaths</code>)</li>
-</ul>
-<p>For primary care data in SystmOne (<code>S1</code>), the delay from events occurring in reality to being available in OpenSAFELY is 2 - 9 days.
+<h3 id="Data-sources">Data sources<a class="anchor-link" href="#Data-sources">&#182;</a></h3><p>The core SystmOne primary care datasets are held in the <code>S1</code> tables in the OpenSAFELY-TPP database. 
+The delay from events being recorded in SystmOne to being available in OpenSAFELY-TPP is around 2 - 9 days.
 Reducing this to one day is possible for urgent queries where necessary.</p>
-<p>Note that currently only the <code>SGSS_Negative</code> and <code>SGSS_Positive</code> tables are queriable with a study definition. 
-These tables only provide the first known test for any person (with a few unexplained exceptions), so there won't be multiple positive tests per patient in SGSS data. Data for negative test results is unreliable. 
-Support for <code>SGSS_AllTests_Positive</code> and <code>SGSS_AllTests_Negative</code> will be added later.</p>
-<p>Additional data sources include:</p>
+<p>All externally-linked data sources are listed below, with the (core) table name given in brackets:</p>
 <ul>
+<li>All positive or negative SARS-CoV2 tests, from SGSS (<code>SGSS_AllTests_Positive</code> and <code>SGSS_AllTests_Negative</code>)</li>
+<li>First-ever positive or negative SARS-CoV2 test, from SGSS (<code>SGSS_Positive</code> and <code>SGSS_Negative</code>)</li>
+<li>A&amp;E attendances, from SUS Emergency Care data (<code>EC</code>)</li>
+<li>In-patient hospital admissions, from SUS Admitted Patient Care Spells data (<code>APCS</code>)</li>
+<li>Out-patient hospital appointments, from SUS (<code>OPA</code>)</li>
+<li>Covid-related ICU admissions, from ICNARC (<code>ICNARC</code>)</li>
+<li>Covid-related in-hospital deaths, from CPNS (<code>CPNS</code>)</li>
+<li>COVID-19 Infection Survey, from ONS (<code>ONS_CIS</code>)</li>
+<li>All-cause registered deaths, from ONS (<code>ONS_Deaths</code>)</li>
 <li>High cost drugs (<code>HighCostDrugs</code>)</li>
 <li>Unique Property Reference Number, used for deriving household variables (<code>UPRN</code>)</li>
 <li>Master Patient Index (<code>MPI</code>)</li>
+<li>Health and Social Care Worker identification, collected at the point of vaccination (<code>HealthCareWorker</code>)</li>
 </ul>
+<p>Some of these tables are accompanied by additional tables with further data. For instance, <code>OPA</code> contains the core out-patient appointment event data, and is supplemented by the <code>OPA_Cost</code>, <code>OPA_Diag</code>, <code>OPA_Proc</code> tables. See the <a href="https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb">data schema notebook</a> for more information.</p>
 
 </div>
 </div>
@@ -57,8 +42,7 @@ Support for <code>SGSS_AllTests_Positive</code> and <code>SGSS_AllTests_Negative
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Notebook-run-date">Notebook run date<a class="anchor-link" href="#Notebook-run-date">&#182;</a></h3>
 </div>
@@ -83,17 +67,17 @@ Support for <code>SGSS_AllTests_Positive</code> and <code>SGSS_AllTests_Negative
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Latest-dataset-import-dates">Latest dataset import dates<a class="anchor-link" href="#Latest-dataset-import-dates">&#182;</a></h2><p>TPP create a snapshot of the primary care information captured in the SystmOne database which is processed (for example unstructured free-text is removed and other OpensAFELY-specific tables are created) before being imported into the OpenSAFELY-TPP database. 
-TPP also receive (or "ingest") external datasets from SUS, ONS, etc., which are processed and imported into OpenSAFELY-TPP. 
+TPP also receive (or "ingest") external datasets from NHS Digital, ONS, etc., which are processed and imported into OpenSAFELY-TPP. 
 Each imported dataset over-writes previously-imported data.</p>
 <p>Once a dataset has been imported, it can be queried immediately in the secure environment. 
 SystmOne data is imported approximately weekly. 
-External datasets are imported shortly after they have been received (usually within a few days). Each external dataset is sent at different times.</p>
+External datasets are usually imported within a few days after they have been received by TPP. 
+Each external dataset is received at different times, sometimes irregularly or with unexpected delays.</p>
 <p>The dates in the table below reflect when the datasets were last imported into the OpenSAFELY-TPP database.
-They do not reflect when the data were received by TPP nor when the latest events described in each dataset occurred.</p>
+They do not reflect when the data were received by TPP nor when the latest clinical or administrative events captured in each dataset occurred.</p>
 
 </div>
 </div>
@@ -106,8 +90,7 @@ They do not reflect when the data were received by TPP nor when the latest event
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
+<div class="output_html rendered_html output_subarea output_execute_result"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -217,8 +200,7 @@ They do not reflect when the data were received by TPP nor when the latest event
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -226,10 +208,9 @@ They do not reflect when the data were received by TPP nor when the latest event
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The figure below shows all dataset import dates for SystmOne (<code>S1</code>) data and for external datasets, up until the date this notebook was run (the vertical black line).</p>
+<h2 id="All-dataset-import-dates">All dataset import dates<a class="anchor-link" href="#All-dataset-import-dates">&#182;</a></h2><p>The figure below shows all dataset import dates for SystmOne and external datasets, up until the date this notebook was run (the vertical black line).</p>
 
 </div>
 </div>
@@ -265,13 +246,12 @@ They do not reflect when the data were received by TPP nor when the latest event
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Event-activity-in-external-datasets">Event activity in external datasets<a class="anchor-link" href="#Event-activity-in-external-datasets">&#182;</a></h2><p>Event activity (i.e., counts of patient events such as hospital admissions and deaths) is reported for each external dataset from 1 February up to the notebook run date, and for the latest 30 days of activity.</p>
-<p>The OpenSAFELY-TPP database only includes patients recently (&lt; 5 years) or actively registered at a GP practice using TPP's SystmOne clinical information system (roughly 40% of English residents). 
-Event activity therefore reflects these patients only.</p>
-<p>All recorded events are extracted.</p>
+<h2 id="Event-activity-in-external-datasets">Event activity in external datasets<a class="anchor-link" href="#Event-activity-in-external-datasets">&#182;</a></h2><p>In the figures below, event activity (counts of events such as hospital admissions and deaths) is reported for external data sources from 1 February 2020 up to the notebook run date (left plot), and for the latest 30 days of activity up to the most recent event date (right plot).</p>
+<p>The left plots can be used to gain a rough idea of event activity over time and helps to sense-check event frequencies and/or population counts in extracted datasets; it should not be used for direct clinical or epidemiological inference. The right plots can be used to gauge the latest reliable date for events recorded in each data source, i.e., a cut-off beyond which the data may be incomplete.</p>
+<p>Note that the OpenSAFELY-TPP database only includes people who were ever registered at a GP practice using TPP's SystmOne clinical information system (roughly 40% of GP practices) on or after 1 January 2009, including those who have since deregistered or died. The data therefore captures activity for these patients only.</p>
+<p>Counts of five or less are redacted.</p>
 
 </div>
 </div>
@@ -282,11 +262,8 @@ Event activity therefore reflects these patients only.</p>
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The plots below show activity for 1 Feb 2020 onwards (left plot) and for the last 30 days up to the most recent event date (right plot). 
-Counts less than five are redacted.</p>
 
 </div>
 </div>
@@ -411,8 +388,7 @@ Counts less than five are redacted.</p>
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Recurrent-events-/-repeat-patient-IDs">Recurrent events / repeat patient IDs<a class="anchor-link" href="#Recurrent-events-/-repeat-patient-IDs">&#182;</a></h2><p>Some datasets may have multiple rows per patient, for instance if the patient was admitted to hospital more than once. 
 Currently a study definition can return either the first event, the last event, or the count of events occurring during the period of interest. 
@@ -440,8 +416,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -469,16 +444,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -533,8 +506,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -558,8 +530,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -587,16 +558,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -631,8 +600,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -656,8 +624,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -685,16 +652,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -749,8 +714,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -774,8 +738,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -803,16 +766,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -867,8 +828,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -892,8 +852,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -921,16 +880,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -970,8 +927,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -995,8 +951,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1024,16 +979,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1088,8 +1041,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
@@ -1113,8 +1065,7 @@ This is the number of events that can be returned by a study variable that takes
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1142,16 +1093,14 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea ">
-<div>
+<div class="output_html rendered_html output_subarea "><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1186,8 +1135,7 @@ This is the number of events that can be returned by a study variable that takes
     </tr>
   </tbody>
 </table>
-</div>
-</div>
+</div></div>
 
 </div>
 
