@@ -31,7 +31,7 @@
 # The delay from events being recorded in SystmOne to being available in OpenSAFELY-TPP is around 2 - 9 days.
 # Reducing this to one day is possible for urgent queries where necessary.
 #
-# All externally-linked data sources are listed below, with the (core) table name given in brackets:
+# All externally-linked data sources are listed below, with the table name given in brackets:
 #
 # * All positive or negative SARS-CoV2 tests, from SGSS (`SGSS_AllTests_Positive` and `SGSS_AllTests_Negative`)
 # * First-ever positive or negative SARS-CoV2 test, from SGSS (`SGSS_Positive` and `SGSS_Negative`)
@@ -159,9 +159,6 @@ date_range = pd.DataFrame(
 # +
 def datequery(table, var_table, var_df, from_date, to_date):
     query = (
-#      "SELECT " + var_table + " AS " + var_df
-#    + " FROM " + table
-#    + " WHERE " + var_table + " >= CONVERT(date, '" + from_date + "')"
       f"""
         SELECT {var_table} AS {var_df}
         FROM {table}
