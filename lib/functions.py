@@ -330,6 +330,7 @@ def plotcounts(date_range, events=None, title="", lookback=30):
     axs[0].add_patch(patches.Rectangle((xlimlower1,0), xlimupper1-xlimlower1, max([ylimupper1, 7]), linewidth=1, edgecolor='orange', linestyle='--', facecolor='floralwhite', zorder=1))
     axs[0].add_patch(patches.Rectangle((xlimlower0,0) ,xlimupper0-xlimlower0, 5, linewidth=1, edgecolor='none', facecolor='mistyrose', zorder=3))
     
+    axs[0].annotate("Disclaimer: counts are based on raw event data and should not be used for clinical or epidemiological inference", xy=(0, -0.1), xycords='axes fraction', ha='left')
     
     
     plt.subplots_adjust(top=0.8, wspace = 0.2, hspace = 0.9)
