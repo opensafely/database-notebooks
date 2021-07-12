@@ -15,28 +15,34 @@
 # ---
 
 # + [markdown]
-# # Dataset schema in OpenSAFELY
+# # Dataset schema in OpenSAFELY-TPP
 #
-# This notebook provides information about the data schema for tables in the OpenSAFELY-TPP database. 
+# This notebook displays the schema of the OpenSAFELY-TPP database. It is part of the technical documentation of the OpenSAFELY platform to help users understand the underlying data and guide analyses. 
 #
+# If you would like to apply to use the OpenSAFELY platform please read our [documentation](https://docs.opensafely.org/), the [principles of the platform](https://www.opensafely.org/about/), and information about our [pilot programme for onboarding external users](https://www.opensafely.org/onboarding-new-users/).
+#
+# If you want to see the Python code used to create this notebook, you can [view it on GitHub](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb).
 # -
 
 
 # ### Data sources
-# Data sources are listed below, with the table name in the database given in brackets:
+# The core SystmOne primary care datasets are held in the `S1` tables in the OpenSAFELY-TPP database. Other externally-linked data sources are listed below, with the table name given in brackets:
 #
-# * Primary care records, from TPP-SystmOne (`S1`)
-# * Positive or negative SARS-CoV2 test, from SGSS (`SGSS`)
-# * A&E attendance, from SUS Emergency Care Data (`ECDS`)
-# * Hospital admission, from SUS Admitted Patient Care Data (`APCS`)
-# * Covid-related ICU admission, from ICNARC (`ICNARC`)
-# * Covid-related in-hospital death, from CPNS (`CPNS`)
+# * All positive or negative SARS-CoV2 tests, from SGSS (`SGSS_AllTests_Positive` and `SGSS_AllTests_Negative`)
+# * First-ever positive or negative SARS-CoV2 test, from SGSS (`SGSS_Positive` and `SGSS_Negative`)
+# * A&E attendances, from SUS Emergency Care data (`EC`)
+# * In-patient hospital admissions, from SUS Admitted Patient Care Spells data (`APCS`)
+# * Out-patient hospital appointments, from SUS (`OPA`)
+# * Covid-related ICU admissions, from ICNARC (`ICNARC`)
+# * Covid-related in-hospital deaths, from CPNS (`CPNS`)
+# * COVID-19 Infection Survey, from ONS (`ONS_CIS`)
 # * All-cause registered deaths, from ONS (`ONS_Deaths`)
-#
-# Additional data sources include:
 # * High cost drugs (`HighCostDrugs`)
 # * Unique Property Reference Number, used for deriving household variables (`UPRN`)
 # * Master Patient Index (`MPI`)
+# * Health and Social Care Worker identification, collected at the point of vaccination (`HealthCareWorker`)
+#
+# Some of these tables are accompanied by additional tables with further data. For instance, `OPA` contains the core out-patient appointment event data, and is supplemented by the `OPA_Cost`, `OPA_Diag`, `OPA_Proc` tables. See the [data schema notebook](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb) for more information. 
 
 # +
 ## Import libraries
@@ -57,7 +63,7 @@ from functions import *
 
 
 # +
-# get server credentials from environ.txt
+# get the server credentials from environ.txt
 
 dbconn = os.environ.get('FULL_DATABASE_URL', None).strip('"')
 
