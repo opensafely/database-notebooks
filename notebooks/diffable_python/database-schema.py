@@ -19,6 +19,8 @@
 #
 # This notebook displays the schema of the OpenSAFELY-TPP database. It is part of the technical documentation of the OpenSAFELY platform to help users understand the underlying data and guide analyses. 
 #
+# The schema data is read from the `OpenSAFELYSchemaInformation` table, which is refreshed at the same time as the core `S1` SystemOne tables.
+#
 # If you would like to apply to use the OpenSAFELY platform please read our [documentation](https://docs.opensafely.org/), the [principles of the platform](https://www.opensafely.org/about/), and information about our [pilot programme for onboarding external users](https://www.opensafely.org/onboarding-new-users/).
 #
 # If you want to see the Python code used to create this notebook, you can [view it on GitHub](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb).
