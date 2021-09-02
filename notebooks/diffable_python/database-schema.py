@@ -19,7 +19,7 @@
 #
 # This notebook displays the schema of the OpenSAFELY-TPP database. It is part of the technical documentation of the OpenSAFELY platform to help users understand the underlying data and guide analyses. 
 #
-# The schema data is read from the `OpenSAFELYSchemaInformation` table, which is refreshed at the same time as the core `S1` SystemOne tables.
+# The schema information is read from the `OpenSAFELYSchemaInformation` table, which is refreshed at the same time as the core `S1` SystemOne tables. There are some non-automated steps required to update the schema information when a new table is added to the database &mdash; if you can't see a table that you are expecting to see, speak to TPP.
 #
 # If you would like to apply to use the OpenSAFELY platform please read our [documentation](https://docs.opensafely.org/), the [principles of the platform](https://www.opensafely.org/about/), and information about our [pilot programme for onboarding external users](https://www.opensafely.org/onboarding-new-users/).
 #
