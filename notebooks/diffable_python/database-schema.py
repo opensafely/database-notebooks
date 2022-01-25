@@ -113,3 +113,6 @@ for source in table_names['DataSource'].unique():
         tab = tab.drop(columns=['TableName', 'DataSource', 'ColumnId', 'CollationName'])
         display(Markdown(f"#### {table}"))
         display(tab.set_index('ColumnName'))
+# -
+
+

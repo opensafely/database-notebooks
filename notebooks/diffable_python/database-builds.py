@@ -157,12 +157,14 @@ date_range = pd.DataFrame(
 
 
 # +
-def datequery(table, var_table, var_df, from_date, to_date):
+def datequery(table, var_table, from_date, to_date):
     query = (
       f"""
-        SELECT {var_table} AS {var_df}
+        SELECT {var_table} AS date, COUNT(*) AS count
         FROM {table}
         WHERE {var_table} >= CONVERT(date, '{from_date}') AND {var_table} <= CONVERT(date, '{to_date}')
+        GROUP BY {var_table}
+        ORDER BY {var_table}
       """
     )
     return query
@@ -172,65 +174,74 @@ end_date_text = end_date.strftime('%Y-%m-%d')
 
 #CodedEvent_query = datequery("CodedEvent", "ConsultationDate", "consultation_date", start_date_text, end_date_text)
 #Appointment_query = datequery("Appointment", "SeenDate", "appointment_date", start_date_text, end_date_text)
-APCS_query = datequery("APCS", "Admission_Date", "hosp_admission_date", start_date_text, end_date_text)
-CPNS_query = datequery("CPNS", "DateOfDeath", "cpns_death_date", start_date_text, end_date_text)
-EC_query = datequery("EC", "Arrival_Date", "ed_attendance_date", start_date_text, end_date_text)
-ICNARC_query = datequery("ICNARC", "CONVERT(date, IcuAdmissionDateTime)", "icu_admission_date", start_date_text, end_date_text)
-ONS_query = datequery("ONS_Deaths", "dod", "ons_death_date", start_date_text, end_date_text)
-OPA_query = datequery("OPA", "Appointment_Date", "opa_appointment_date", start_date_text, end_date_text)
+APCS_query = datequery("APCS", "Admission_Date", start_date_text, end_date_text)
+CPNS_query = datequery("CPNS", "DateOfDeath", start_date_text, end_date_text)
+EC_query = datequery("EC", "Arrival_Date", start_date_text, end_date_text)
+ICNARC_query = datequery("ICNARC", "CONVERT(date, IcuAdmissionDateTime)", start_date_text, end_date_text)
+ONS_query = datequery("ONS_Deaths", "dod", start_date_text, end_date_text)
+OPA_query = datequery("OPA", "Appointment_Date", start_date_text, end_date_text)
 SGSS_query = datequery("""( 
          SELECT Earliest_Specimen_Date FROM SGSS_Positive 
          UNION ALL
          SELECT Earliest_Specimen_Date FROM SGSS_Negative
          )  AS a""", 
-        "Earliest_Specimen_Date", "specimen_date", start_date_text, end_date_text)
-SGSSpos_query = datequery("SGSS_Positive", "Earliest_Specimen_Date", "specimen_date", start_date_text, end_date_text)
+        "Earliest_Specimen_Date", start_date_text, end_date_text)
+SGSSpos_query = datequery("SGSS_Positive", "Earliest_Specimen_Date", start_date_text, end_date_text)
 SGSS_AllTests_query = datequery("""( 
          SELECT Specimen_Date FROM SGSS_AllTests_Positive 
          UNION ALL
          SELECT Specimen_Date FROM SGSS_AllTests_Negative
          )  AS a""", 
-        "Specimen_Date", "specimen_date", start_date_text, end_date_text)
-SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", "specimen_date", start_date_text, end_date_text)
+        "Specimen_Date", start_date_text, end_date_text)
+SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", start_date_text, end_date_text)
 
 with closing_connection(dbconn) as cnxn:
     #CodedEvent_df = pd.read_sql(CodedEvent_query, cnxn, parse_dates=['coded_event_date'])
     #Appointment_df = pd.read_sql(Appointment_query, cnxn, parse_dates=['appointment_date'])
-    APCS_df = pd.read_sql(APCS_query, cnxn, parse_dates=['hosp_admission_date'])
-    OPA_df = pd.read_sql(OPA_query, cnxn, parse_dates=['opa_appointment_date'])
-    CPNS_df = pd.read_sql(CPNS_query, cnxn, parse_dates=['cpns_death_date'])
-    EC_df = pd.read_sql(EC_query, cnxn, parse_dates=['ed_attendance_date'])
-    ICNARC_df = pd.read_sql(ICNARC_query, cnxn, parse_dates=['icu_admission_date'])
-    ONS_df = pd.read_sql(ONS_query, cnxn, parse_dates=['ons_death_date'])
-    SGSS_df = pd.read_sql(SGSS_query, cnxn, parse_dates=['specimen_date'])
-    SGSSpos_df = pd.read_sql(SGSSpos_query, cnxn, parse_dates=['specimen_date'])
-    SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['specimen_date'])
-    SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['specimen_date'])
+    APCS_df = pd.read_sql(APCS_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    OPA_df = pd.read_sql(OPA_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    CPNS_df = pd.read_sql(CPNS_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    EC_df = pd.read_sql(EC_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    ICNARC_df = pd.read_sql(ICNARC_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    ONS_df = pd.read_sql(ONS_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    SGSS_df = pd.read_sql(SGSS_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    SGSSpos_df = pd.read_sql(SGSSpos_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['date'])
     
 # Note that CodedEvent and Appointment extracts take a long time to run.
 
 # +
-def eventcountseries(event_dates, date_range, rule='D', popadjust=False):
+def eventcountseries(df, date_range, rule='D', popadjust=False):
     # to calculate the daily count for events recorded in a series
     # where event_dates is a series
     # set popadjust = 1000, say, to report counts per 1000 population
     
-    pop = event_dates.size
-    counts = event_dates.value_counts().reindex(date_range.index, fill_value=0)
-    
+    df = df.set_index('date')
+    counts = df['count'].reindex(date_range.index, fill_value=0)
+            
     if rule != "D":
         counts = counts.resample(rule).sum()
     
     if popadjust is not False:
-        pop = event_dates.size
+        pop = counts.sum()
         poppern= pop/popadjust
         counts = counts.transform(lambda x: x/poppern)
     
     return(counts)
 
-def createcounts(date_range, events, lastdate, lookback):
-    counts_day = eventcountseries(events, date_range, rule="D")
-    counts_week = eventcountseries(events, date_range, rule="W-FRI")
+def createcounts(date_range, df, lastdate, lookback):
+    counts_day = eventcountseries(df, date_range, rule="D")
+    counts_week = eventcountseries(df, date_range, rule="W-FRI")
        
     lastdaterecent = lastdate - pd.to_timedelta(lookback, unit="D")
     lastcounts = counts_day.loc[(counts_day.index >= lastdaterecent) & (counts_day.index <= lastdate)]
@@ -246,11 +257,13 @@ def createcounts(date_range, events, lastdate, lookback):
     return counts_day, counts_week, lastcounts, lastredact
 
 
-def plotcounts(date_range, events=None, title=""):
-    # This function plots event counts over time both overall and for the last X days up to the most recent extracted event.  
+def plotcounts(date_range, df, title=""):
+    # This function plots event counts over time both overall and for the last X days up to the most recent extracted event.
+    
+    date = df['date']
     startdate = date_range.index.min()
     enddate = date_range.index.max()
-    lastdate = events.max()
+    lastdate = df['date'].max()
         
     startdatestring = startdate.strftime('%-d %B %Y')
     enddatestring = enddate.strftime('%-d %B %Y')
@@ -258,14 +271,14 @@ def plotcounts(date_range, events=None, title=""):
     
     lookback=30
 
-    counts_day, counts_week, lastcounts, redact = createcounts(date_range, events, lastdate, lookback)
+    counts_day, counts_week, lastcounts, redact = createcounts(date_range, df, lastdate, lookback)
     
    # xlimlower = mdates.date2num(lastcounts.index[0]+pd.DateOffset(days=-1))
    # xlimupper = mdates.date2num(lastcounts.index[-1]+pd.DateOffset(days=+1))
     
     fig, axs = plt.subplots(1, 2, figsize=(15,5))
     
-    axs[1].plot(lastcounts.index, lastcounts, label=events.name, marker='o', markersize=5, color='darkblue', zorder=1)
+    axs[1].plot(lastcounts.index, lastcounts, marker='o', markersize=5, color='darkblue', zorder=1)
     axs[1].plot(lastcounts[redact].index, lastcounts[redact], 'o', linestyle = 'None', color='None', zorder=2)
     axs[1].xaxis.set_tick_params(labelrotation=70)
     axs[1].xaxis.set_major_locator(ticker.MultipleLocator(2))
@@ -309,16 +322,16 @@ def plotcounts(date_range, events=None, title=""):
 
 
 #plotcounts(date_range, CodedEvent_df['coded_event_date'], title="Any coded event in Primary Care, from SystmOne")
-plotcounts(date_range, SGSS_df['specimen_date'], title="First-only SARS-CoV2 test (SGSS)")
-plotcounts(date_range, SGSSpos_df['specimen_date'], title="First-only Positive SARS-CoV2 test (SGSS)")
-plotcounts(date_range, SGSS_all_df['specimen_date'], title="Any SARS-CoV2 test (SGSS)")
-plotcounts(date_range, SGSSpos_all_df['specimen_date'], title="Positive SARS-CoV2 test (SGSS)")
-plotcounts(date_range, EC_df['ed_attendance_date'], title="A&E attendance (SUS EC)")
-plotcounts(date_range, APCS_df['hosp_admission_date'], title="In-patient hospital admission (SUS APCS)")
-plotcounts(date_range, OPA_df['opa_appointment_date'], title="Out-patient hospital appointment (SUS OPA)")
-plotcounts(date_range, ICNARC_df['icu_admission_date'], title="Covid-related ICU admission (ICNARC)")
-plotcounts(date_range, CPNS_df['cpns_death_date'], title="Covid-related in-hospital death (CPNS)")
-plotcounts(date_range, ONS_df['ons_death_date'], title="Registered death (ONS)")
+plotcounts(date_range, SGSS_df, title="First-only SARS-CoV2 test (SGSS)")
+plotcounts(date_range, SGSSpos_df, title="First-only Positive SARS-CoV2 test (SGSS)")
+plotcounts(date_range, SGSS_all_df, title="Any SARS-CoV2 test (SGSS)")
+plotcounts(date_range, SGSSpos_all_df, title="Positive SARS-CoV2 test (SGSS)")
+plotcounts(date_range, EC_df, title="A&E attendance (SUS EC)")
+plotcounts(date_range, APCS_df, title="In-patient hospital admission (SUS APCS)")
+plotcounts(date_range, OPA_df, title="Out-patient hospital appointment (SUS OPA)")
+plotcounts(date_range, ICNARC_df, title="Covid-related ICU admission (ICNARC)")
+plotcounts(date_range, CPNS_df, title="Covid-related in-hospital death (CPNS)")
+plotcounts(date_range, ONS_df, title="Registered death (ONS)")
 
 
 # +
@@ -371,14 +384,15 @@ def recurrentquery(table, id_table, date_table, from_date, head=5):
 # `patients_with_at_least_1_events` is the number of unique patients in the dataset. 
 # This is the number of events that can be returned by a study variable that takes the first event or the last event, from 1 February onwards. 
 
-# +
 with closing_connection(dbconn) as cnxn:
     recurrentquery("APCS", "Patient_ID", "Admission_Date", start_date_text, 5)
     recurrentquery("OPA", "Patient_ID", "Appointment_Date", start_date_text, 5)
     recurrentquery("CPNS", "Patient_ID", "DateOfDeath", start_date_text, 5)
     recurrentquery("EC", "Patient_ID", "Arrival_Date", start_date_text, 5)
     recurrentquery("ICNARC", "Patient_ID", "IcuAdmissionDateTime", start_date_text, 5)
-    #recurrentquery("SGSS", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
+    recurrentquery("SGSS", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
     recurrentquery("SGSS_Positive", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
     recurrentquery("SGSS_AllTests_Positive", "Patient_ID", "Specimen_Date", start_date_text, 5)
     recurrentquery("ONS_Deaths", "Patient_ID", "dod", start_date_text, 5)
+
+
