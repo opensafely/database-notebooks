@@ -107,9 +107,11 @@ display(Markdown(f"""This notebook was run on {run_date.strftime('%-d %B %Y')}. 
 def datequery(table, var, from_date):
     query = (
       f"""
-        SELECT {var} AS date
+        SELECT {var} AS date, COUNT(*) AS count
         FROM {table}
         WHERE {var} >= CONVERT(date, '{from_date}')
+        GROUP BY {var}
+        ORDER BY {var}
       """
     )
     return query
@@ -124,17 +126,17 @@ OPA_query = datequery("OPA", "Appointment_Date", start_date_text)
 ICNARC_query = datequery("ICNARC", "CONVERT(date, IcuAdmissionDateTime)", start_date_text)
 ONS_query = datequery("ONS_Deaths", "dod", start_date_text)
 SGSS_query = datequery("""( 
-         SELECT * FROM SGSS_Positive 
-         UNION
-         SELECT * FROM SGSS_Negative
-         )  """, 
+         SELECT Earliest_Specimen_Date FROM SGSS_Positive 
+         UNION ALL
+         SELECT Earliest_Specimen_Date FROM SGSS_Negative
+         ) AS a """, 
         "Earliest_Specimen_Date", start_date_text)
 SGSSpos_query = datequery("SGSS_Positive", "Earliest_Specimen_Date", start_date_text)
 SGSS_AllTests_query = datequery("""( 
-         SELECT * FROM SGSS_AllTests_Positive 
-         UNION
-         SELECT * FROM SGSS_AllTests_Negative
-         ) """, 
+         SELECT Specimen_Date FROM SGSS_AllTests_Positive 
+         UNION ALL
+         SELECT Specimen_Date FROM SGSS_AllTests_Negative
+         ) AS a """, 
         "Specimen_Date", start_date_text)
 SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", start_date_text)
 
@@ -147,19 +149,22 @@ with closing_connection(dbconn) as cnxn:
     OPA_df = pd.read_sql(OPA_query, cnxn, parse_dates=['date'])
     ICNARC_df = pd.read_sql(ICNARC_query, cnxn, parse_dates=['date'])
     ONS_df = pd.read_sql(ONS_query, cnxn, parse_dates=['date'])
-    #SGSS_df = pd.read_sql(SGSS_query, cnxn, parse_dates=['date'])
-    #SGSSpos_df = pd.read_sql(SGSSpos_query, cnxn, parse_dates=['date'])
-    #SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['date'])
-    #SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['date'])
+    SGSS_df = pd.read_sql(SGSS_query, cnxn, parse_dates=['date'])
+    SGSSpos_df = pd.read_sql(SGSSpos_query, cnxn, parse_dates=['date'])
+    SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['date'])
+    SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['date'])
     
 # Note that CodedEvent and Appointment extracts take a long time to run.
 # The sql for the combined SGSS tables has stopped working, so are not currently run
 # -
 
-def plotcounts_history(events=None, title=""):
+def plotcounts_history(df, title=""):
     # This function plots event counts over time both overall and for the last X days up to the most recent extracted event.  
-    startdate = events.min()
-    enddate = events.max()
+    
+    
+    
+    startdate = df['date'].min()
+    enddate = df['date'].max()
     
     date_range = pd.DataFrame(
         index = pd.date_range(start=startdate, end=enddate, freq="D")
@@ -168,12 +173,29 @@ def plotcounts_history(events=None, title=""):
     startdatestring = startdate.strftime('%Y-%m-%d')
     enddatestring = enddate.strftime('%Y-%m-%d')
     
+    def eventcountseries(df, date_range, rule='D', popadjust=False):
+        # to calculate the daily count for events recorded in a series
+        # where event_dates is a series
+        # set popadjust = 1000, say, to report counts per 1000 population
 
-    counts_day = eventcountseries(events, date_range, rule="D")
+        df = df.set_index('date')
+        counts = df['count'].reindex(date_range.index, fill_value=0)
+
+        if rule != "D":
+            counts = counts.resample(rule).sum()
+
+        if popadjust is not False:
+            pop = counts.sum()
+            poppern= pop/popadjust
+            counts = counts.transform(lambda x: x/poppern)
+
+        return(counts)
+
+    counts_day = eventcountseries(df, date_range, rule="D")
     redact_day = (counts_day <6) & (counts_day>0)
     counts_day = counts_day.where(~redact_day, 3) #redact small numbers
     
-    counts_week = eventcountseries(events, date_range, rule="W")
+    counts_week = eventcountseries(df, date_range, rule="W")
     redact_week = (counts_week <6) & (counts_week>0)
     counts_week = counts_week.where(~redact_week, 3) #redact small numbers
        
@@ -206,15 +228,17 @@ def plotcounts_history(events=None, title=""):
     plt.show()
 
 #plotcounts_history(CodedEvent_df['coded_event_date'], title="Any coded event in Primary Care, from SystmOne")
-#plotcounts_history(SGSS_df['date'], title="First-only SARS-CoV2 test (SGSS)")
-#plotcounts_history(SGSSpos_df['date'], title="First-only Positive SARS-CoV2 test (SGSS)")
-#plotcounts_history(SGSS_all_df['date'], title="Any SARS-CoV2 test (SGSS)")
-#plotcounts_history(SGSSpos_all_df['date'], title="Positive SARS-CoV2 test (SGSS)")
-plotcounts_history(EC_df['date'], title="A&E attendance (SUS EC)")
-plotcounts_history(OPA_df['date'], title="Out-patient hospital appointment (SUS OPA)")
-plotcounts_history(APCS_df['date'], title="In-patient hospital admission (SUS APCS)")
-plotcounts_history(ICNARC_df['date'], title="Covid-related ICU admission (ICNARC)")
-plotcounts_history(CPNS_df['date'], title="Covid-related in-hospital death (CPNS)")
-plotcounts_history(ONS_df['date'], title="Registered death (ONS)")
+plotcounts_history(SGSS_df, title="First-only SARS-CoV2 test (SGSS)")
+plotcounts_history(SGSSpos_df, title="First-only Positive SARS-CoV2 test (SGSS)")
+plotcounts_history(SGSS_all_df, title="Any SARS-CoV2 test (SGSS)")
+plotcounts_history(SGSSpos_all_df, title="Positive SARS-CoV2 test (SGSS)")
+plotcounts_history(EC_df, title="A&E attendance (SUS EC)")
+plotcounts_history(OPA_df, title="Out-patient hospital appointment (SUS OPA)")
+plotcounts_history(APCS_df, title="In-patient hospital admission (SUS APCS)")
+plotcounts_history(ICNARC_df, title="Covid-related ICU admission (ICNARC)")
+plotcounts_history(CPNS_df, title="Covid-related in-hospital death (CPNS)")
+plotcounts_history(ONS_df, title="Registered death (ONS)")
+
+
 
 
