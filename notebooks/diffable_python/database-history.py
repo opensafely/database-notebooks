@@ -238,7 +238,3 @@ plotcounts_history(APCS_df, title="In-patient hospital admission (SUS APCS)")
 plotcounts_history(ICNARC_df, title="Covid-related ICU admission (ICNARC)")
 plotcounts_history(CPNS_df, title="Covid-related in-hospital death (CPNS)")
 plotcounts_history(ONS_df, title="Registered death (ONS)")
-
-
-
-
