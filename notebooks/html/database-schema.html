@@ -4588,42 +4588,42 @@
   </thead>
   <tbody>
     <tr>
-      <th>Patient_ID</th>
-      <td>bigint</td>
-      <td>8</td>
-      <td>19</td>
-      <td>0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>EC_Ident</th>
-      <td>bigint</td>
-      <td>8</td>
-      <td>19</td>
-      <td>0</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>EC_PCD_Indicator</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>CDS_Type</th>
+      <th>EC_Department_Type</th>
       <td>varchar</td>
-      <td>3</td>
+      <td>2</td>
       <td>0</td>
       <td>0</td>
       <td>True</td>
     </tr>
     <tr>
-      <th>CDS_Group_Indicator</th>
+      <th>Arrival_Date</th>
+      <td>datetime</td>
+      <td>8</td>
+      <td>23</td>
+      <td>3</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Arrival_Time</th>
+      <td>varchar</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Arrival_Month</th>
       <td>bigint</td>
       <td>8</td>
       <td>19</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>EC_Arrival_Mode_SNOMED_CT</th>
+      <td>varchar</td>
+      <td>18</td>
+      <td>0</td>
       <td>0</td>
       <td>True</td>
     </tr>
@@ -4636,41 +4636,41 @@
       <td>...</td>
     </tr>
     <tr>
-      <th>Der_EC_Departure_Date_Time</th>
-      <td>datetime</td>
-      <td>8</td>
-      <td>23</td>
-      <td>3</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Der_EC_Duration</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Der_Dupe_Flag</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Der_Record_Type</th>
+      <th>Accessible_Information_Professional_Required_Code_Approved</th>
       <td>varchar</td>
-      <td>4</td>
+      <td>5</td>
       <td>0</td>
       <td>0</td>
       <td>True</td>
     </tr>
     <tr>
-      <th>Der_AEA_Patient_Group</th>
+      <th>Interpreter_Language_SNOMED_CT</th>
       <td>varchar</td>
-      <td>2</td>
+      <td>18</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Interpreter_Language_Code_Approved</th>
+      <td>varchar</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Overseas_Visitor_Charging_Category</th>
+      <td>varchar</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Site_Code_of_Treatment</th>
+      <td>varchar</td>
+      <td>5</td>
       <td>0</td>
       <td>0</td>
       <td>True</td>
@@ -6215,14 +6215,6 @@
     <tr>
       <th>Symptomatic</th>
       <td>varchar</td>
-      <td>50</td>
-      <td>0</td>
-      <td>0</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Ethnic_Category_Desc</th>
-      <td>varchar</td>
       <td>255</td>
       <td>0</td>
       <td>0</td>
@@ -6376,6 +6368,54 @@
       <td>0</td>
       <td>True</td>
     </tr>
+    <tr>
+      <th>Symptomatic</th>
+      <td>varchar</td>
+      <td>50</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Ethnic_Category_Desc</th>
+      <td>varchar</td>
+      <td>255</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Pillar</th>
+      <td>varchar</td>
+      <td>255</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>LFT_Flag</th>
+      <td>varchar</td>
+      <td>255</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Variant</th>
+      <td>varchar</td>
+      <td>255</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>VariantDetectionMethod</th>
+      <td>varchar</td>
+      <td>255</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
   </tbody>
 </table>
 </div></div>
@@ -6492,21 +6532,211 @@
       <td>0</td>
       <td>True</td>
     </tr>
+  </tbody>
+</table>
+</div></div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="NHSE_Therapeutics">NHSE_Therapeutics<a class="anchor-link" href="#NHSE_Therapeutics">&#182;</a></h3>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="Therapeutics">Therapeutics<a class="anchor-link" href="#Therapeutics">&#182;</a></h4>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea "><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ColumnType</th>
+      <th>MaxLength</th>
+      <th>Precision</th>
+      <th>Scale</th>
+      <th>IsNullable</th>
+    </tr>
     <tr>
-      <th>SGTF</th>
-      <td>varchar</td>
-      <td>10</td>
-      <td>0</td>
+      <th>ColumnName</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Patient_ID</th>
+      <td>bigint</td>
+      <td>8</td>
+      <td>19</td>
       <td>0</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>CaseCategory</th>
+      <th>AgeAtReceivedDate</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Received</th>
+      <td>datetime</td>
+      <td>8</td>
+      <td>23</td>
+      <td>3</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Intervention</th>
       <td>varchar</td>
-      <td>50</td>
+      <td>1000</td>
       <td>0</td>
       <td>0</td>
-      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Diagnosis</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>CurrentStatus</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>FormName</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>TreatmentStartDate</th>
+      <td>datetime</td>
+      <td>8</td>
+      <td>23</td>
+      <td>3</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Region</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>MOL1_onset_of_symptoms</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>MOL1_high_risk_cohort</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>SOT02_onset_of_symptoms</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>SOT02_risk_cohorts</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>SGTF</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>COVID_indication</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Count</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>Der_LoadDate</th>
+      <td>varchar</td>
+      <td>1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -7904,20 +8134,52 @@
   </thead>
   <tbody>
     <tr>
-      <th>MSOA_Code</th>
-      <td>varchar</td>
-      <td>50</td>
-      <td>0</td>
+      <th>Age_3</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
       <td>0</td>
       <td>False</td>
     </tr>
     <tr>
-      <th>LA_Code_2019</th>
-      <td>varchar</td>
-      <td>50</td>
-      <td>0</td>
+      <th>Age_4</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
       <td>0</td>
       <td>False</td>
+    </tr>
+    <tr>
+      <th>Age_5</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>Age_6</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>Age_7</th>
+      <td>int</td>
+      <td>4</td>
+      <td>10</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th>LA_Code_2020</th>
@@ -7944,15 +8206,7 @@
       <td>False</td>
     </tr>
     <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>Age_86</th>
+      <th>Age_1</th>
       <td>int</td>
       <td>4</td>
       <td>10</td>
@@ -7960,31 +8214,7 @@
       <td>False</td>
     </tr>
     <tr>
-      <th>Age_87</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Age_88</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Age_89</th>
-      <td>int</td>
-      <td>4</td>
-      <td>10</td>
-      <td>0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Age_90_Plus</th>
+      <th>Age_2</th>
       <td>int</td>
       <td>4</td>
       <td>10</td>

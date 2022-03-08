@@ -394,5 +394,3 @@ with closing_connection(dbconn) as cnxn:
     recurrentquery("SGSS_Positive", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
     recurrentquery("SGSS_AllTests_Positive", "Patient_ID", "Specimen_Date", start_date_text, 5)
     recurrentquery("ONS_Deaths", "Patient_ID", "dod", start_date_text, 5)
-
-
