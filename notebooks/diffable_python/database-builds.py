@@ -31,21 +31,32 @@
 # The delay from events being recorded in SystmOne to being available in OpenSAFELY-TPP is around 2 - 9 days.
 # Reducing this to one day is possible for urgent queries where necessary.
 #
-# All externally-linked data sources are listed below, with the table name given in brackets:
+# All externally-linked data sources are listed below, with the table name given in brackets. 
+#
+# **Frequently updated datasets:**
 #
 # * All positive or negative SARS-CoV2 tests, from SGSS (`SGSS_AllTests_Positive` and `SGSS_AllTests_Negative`)
 # * First-ever positive or negative SARS-CoV2 test, from SGSS (`SGSS_Positive` and `SGSS_Negative`)
 # * A&E attendances, from SUS Emergency Care data (`EC`)
 # * In-patient hospital admissions, from SUS Admitted Patient Care Spells data (`APCS`)
 # * Out-patient hospital appointments, from SUS (`OPA`)
-# * Covid-related ICU admissions, from ICNARC (`ICNARC`)
 # * Covid-related in-hospital deaths, from CPNS (`CPNS`)
-# * COVID-19 Infection Survey, from ONS (`ONS_CIS`)
 # * All-cause registered deaths, from ONS (`ONS_Deaths`)
+# * COVID-19 therapeutics (`Therapeutics`)
+# * Health and Social Care Worker identification, collected at the point of vaccination (`HealthCareWorker`)
+#
+# **One-off or infrequently updated datasets:**
+#
+# * COVID-19 Infection Survey, from ONS (`ONS_CIS`)
 # * High cost drugs (`HighCostDrugs`)
 # * Unique Property Reference Number, used for deriving household variables (`UPRN`)
 # * Master Patient Index (`MPI`)
-# * Health and Social Care Worker identification, collected at the point of vaccination (`HealthCareWorker`)
+# * UK Renal Registry (`UKRR`)
+#
+# **Deprecated datasets:**
+#
+# * Covid-related ICU admissions, from ICNARC (`ICNARC`)
+# * A&E attendances (old format), from SUS Emergency Care data (`ECDS`)
 #
 # Some of these tables are accompanied by additional tables with further data. For instance, `OPA` contains the core out-patient appointment event data, and is supplemented by the `OPA_Cost`, `OPA_Diag`, `OPA_Proc` tables. See the [data schema notebook](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb) for more information. 
 #
@@ -194,6 +205,7 @@ SGSS_AllTests_query = datequery("""(
          )  AS a""", 
         "Specimen_Date", start_date_text, end_date_text)
 SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", start_date_text, end_date_text)
+Therapeutics_query = datequery("Therapeutics", "TreatmentStartDate", start_date_text, end_date_text)
 
 with closing_connection(dbconn) as cnxn:
     #CodedEvent_df = pd.read_sql(CodedEvent_query, cnxn, parse_dates=['coded_event_date'])
@@ -217,6 +229,8 @@ with closing_connection(dbconn) as cnxn:
     SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['date'])
 with closing_connection(dbconn) as cnxn:
     SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    Therapeutics_df = pd.read_sql(Therapeutics_query, cnxn, parse_dates=['date'])
     
 # Note that CodedEvent and Appointment extracts take a long time to run.
 
@@ -332,3 +346,4 @@ plotcounts(date_range, OPA_df, title="Out-patient hospital appointment (SUS OPA)
 plotcounts(date_range, ICNARC_df, title="Covid-related ICU admission (ICNARC)")
 plotcounts(date_range, CPNS_df, title="Covid-related in-hospital death (CPNS)")
 plotcounts(date_range, ONS_df, title="Registered death (ONS)")
+plotcounts(date_range, Therapeutics_df, title="COVID-19 therapeutics (NHSE)")
