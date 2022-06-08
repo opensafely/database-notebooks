@@ -31,21 +31,32 @@
 # The delay from events being recorded in SystmOne to being available in OpenSAFELY-TPP is around 2 - 9 days.
 # Reducing this to one day is possible for urgent queries where necessary.
 #
-# All externally-linked data sources are listed below, with the table name given in brackets:
+# All externally-linked data sources are listed below, with the table name given in brackets. 
+#
+# **Frequently updated datasets:**
 #
 # * All positive or negative SARS-CoV2 tests, from SGSS (`SGSS_AllTests_Positive` and `SGSS_AllTests_Negative`)
 # * First-ever positive or negative SARS-CoV2 test, from SGSS (`SGSS_Positive` and `SGSS_Negative`)
 # * A&E attendances, from SUS Emergency Care data (`EC`)
 # * In-patient hospital admissions, from SUS Admitted Patient Care Spells data (`APCS`)
 # * Out-patient hospital appointments, from SUS (`OPA`)
-# * Covid-related ICU admissions, from ICNARC (`ICNARC`)
 # * Covid-related in-hospital deaths, from CPNS (`CPNS`)
-# * COVID-19 Infection Survey, from ONS (`ONS_CIS`)
 # * All-cause registered deaths, from ONS (`ONS_Deaths`)
+# * COVID-19 therapeutics (`Therapeutics`)
+# * Health and Social Care Worker identification, collected at the point of vaccination (`HealthCareWorker`)
+#
+# **One-off or infrequently updated datasets:**
+#
+# * COVID-19 Infection Survey, from ONS (`ONS_CIS`)
 # * High cost drugs (`HighCostDrugs`)
 # * Unique Property Reference Number, used for deriving household variables (`UPRN`)
 # * Master Patient Index (`MPI`)
-# * Health and Social Care Worker identification, collected at the point of vaccination (`HealthCareWorker`)
+# * UK Renal Registry (`UKRR`)
+#
+# **Deprecated datasets:**
+#
+# * Covid-related ICU admissions, from ICNARC (`ICNARC`)
+# * A&E attendances (old format), from SUS Emergency Care data (`ECDS`)
 #
 # Some of these tables are accompanied by additional tables with further data. For instance, `OPA` contains the core out-patient appointment event data, and is supplemented by the `OPA_Cost`, `OPA_Diag`, `OPA_Proc` tables. See the [data schema notebook](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb) for more information. 
 #
@@ -194,6 +205,7 @@ SGSS_AllTests_query = datequery("""(
          )  AS a""", 
         "Specimen_Date", start_date_text, end_date_text)
 SGSSpos_AllTests_query = datequery("SGSS_AllTests_Positive", "Specimen_Date", start_date_text, end_date_text)
+Therapeutics_query = datequery("Therapeutics", "TreatmentStartDate", start_date_text, end_date_text)
 
 with closing_connection(dbconn) as cnxn:
     #CodedEvent_df = pd.read_sql(CodedEvent_query, cnxn, parse_dates=['coded_event_date'])
@@ -217,6 +229,8 @@ with closing_connection(dbconn) as cnxn:
     SGSS_all_df = pd.read_sql(SGSS_AllTests_query, cnxn, parse_dates=['date'])
 with closing_connection(dbconn) as cnxn:
     SGSSpos_all_df = pd.read_sql(SGSSpos_AllTests_query, cnxn, parse_dates=['date'])
+with closing_connection(dbconn) as cnxn:
+    Therapeutics_df = pd.read_sql(Therapeutics_query, cnxn, parse_dates=['date'])
     
 # Note that CodedEvent and Appointment extracts take a long time to run.
 
@@ -332,65 +346,4 @@ plotcounts(date_range, OPA_df, title="Out-patient hospital appointment (SUS OPA)
 plotcounts(date_range, ICNARC_df, title="Covid-related ICU admission (ICNARC)")
 plotcounts(date_range, CPNS_df, title="Covid-related in-hospital death (CPNS)")
 plotcounts(date_range, ONS_df, title="Registered death (ONS)")
-
-
-# +
-### number of visits per patient
-
-def recurrentquery(table, id_table, date_table, from_date, head=5):
-    query = (
-    f"""
-    SELECT a.*, b.patients_with_exactly_X_events 
-    FROM (
-        SELECT X, COUNT(X) AS patients_with_at_least_X_events 
-        FROM
-        (
-            SELECT {id_table}, ROW_NUMBER() OVER(PARTITION BY {id_table} ORDER BY {id_table})  AS X
-            FROM {table}
-            WHERE {date_table} >= CONVERT(date, '{from_date}')
-        ) AS a
-        GROUP BY X
-    ) AS a
-    LEFT JOIN
-    (
-        SELECT X, COUNT(X) AS patients_with_exactly_X_events 
-        FROM
-        (
-            select count(*) AS X
-            FROM {table}
-            WHERE {date_table} >= CONVERT(date, '{from_date}')
-            GROUP BY {id_table}
-        ) AS a
-        GROUP BY X
-    ) AS b
-    ON a.X=b.X
-    ORDER BY a.X
-    """
-    )
-    
-    display(Markdown(f"### Repeat events in {table}"))
-    display(pd.read_sql(f"select count(*) as total_events from {table} where {date_table} >= CONVERT(date, '{from_date}')", cnxn))
-    display(pd.read_sql(query, cnxn).fillna(0).astype(int).head(head).set_index("X"))
-    print(" ")
-
-
-# -
-
-# ## Recurrent events / repeat patient IDs
-# Some datasets may have multiple rows per patient, for instance if the patient was admitted to hospital more than once. 
-# Currently a study definition can return either the first event, the last event, or the count of events occurring during the period of interest. 
-# The tables below count recurrent events for each dataset from 1 February onwards, up to 5 events. 
-#
-# `patients_with_at_least_1_events` is the number of unique patients in the dataset. 
-# This is the number of events that can be returned by a study variable that takes the first event or the last event, from 1 February onwards. 
-
-with closing_connection(dbconn) as cnxn:
-    recurrentquery("APCS", "Patient_ID", "Admission_Date", start_date_text, 5)
-    recurrentquery("OPA", "Patient_ID", "Appointment_Date", start_date_text, 5)
-    recurrentquery("CPNS", "Patient_ID", "DateOfDeath", start_date_text, 5)
-    recurrentquery("EC", "Patient_ID", "Arrival_Date", start_date_text, 5)
-    recurrentquery("ICNARC", "Patient_ID", "IcuAdmissionDateTime", start_date_text, 5)
-    recurrentquery("SGSS", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
-    recurrentquery("SGSS_Positive", "Patient_ID", "Earliest_Specimen_Date", start_date_text, 5)
-    recurrentquery("SGSS_AllTests_Positive", "Patient_ID", "Specimen_Date", start_date_text, 5)
-    recurrentquery("ONS_Deaths", "Patient_ID", "dod", start_date_text, 5)
+plotcounts(date_range, Therapeutics_df, title="COVID-19 therapeutics (NHSE)")
