@@ -1,8 +1,18 @@
-This repo contains [four notebooks](https://github.com/opensafely/database-notebooks/tree/master/notebooks) that describe elements of the OpenSAFELY-TPP database. These are run using direct queries to the database on the L2 server, rather than via study definitions. 
+The notebooks in this repo have been superseded by the following OpenSAFELY-TPP database reports.
+Each has a **repo** on GitHub, a **workspace** on OpenSAFELY Jobs, and a **report** on OpenSAFELY Reports:
 
-* [Database builds](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-builds.ipynb), describing the build dates for each OpenSAFELY-TPP dataset, and number of events per day in (most of) the linked datasets since Feb 2020 and in the 30 days preceding the last recorded event.
-* [Database schema](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-schema.ipynb) schema for tables in the database &mdash; column names, types, etc.
-* [Database history](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-history.ipynb) similar to database builds, but it provides events per day ever since the first known recorded event.
-* [Patient characteristics](https://github.com/opensafely/database-notebooks/blob/master/notebooks/database-patient-characteristics.ipynb) basic counts for patients present in the database.
+* tpp-database-history ([repo][1], [workspace][2], [report][3])
+* tpp-database-import-dates ([repo][4], [workspace][5], [report][6])
+* tpp-database-schema ([repo][7], [workspace][8], [report][9])
 
-The first two notebooks are viewable on the [OpenSAFELY reports website](https://reports.opensafely.org/) under the _Databases_ tab.
+[1]: https://github.com/opensafely/tpp-database-history
+[2]: https://jobs.opensafely.org/datalab/opensafely-internal/tpp-database-history/
+[3]: https://reports.opensafely.org/reports/opensafely-tpp-database-history/
+
+[4]: https://github.com/opensafely/tpp-database-import-dates
+[5]: https://jobs.opensafely.org/datalab/opensafely-internal/tpp-database-import-dates/
+[6]: https://reports.opensafely.org/reports/opensafely-tpp-database-builds/
+
+[7]: https://github.com/opensafely/tpp-database-schema
+[8]: https://jobs.opensafely.org/datalab/opensafely-internal/tpp-database-schema/
+[9]: https://reports.opensafely.org/reports/opensafely-tpp-database-schema/
